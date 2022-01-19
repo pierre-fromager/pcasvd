@@ -12,10 +12,10 @@
 static void dispm(
     std::string title,
     alglib::real_2d_array v,
-    unsigned int nbrow,
-    unsigned int nbcol)
+    ui_t nbrow,
+    ui_t nbcol)
 {
-    unsigned int i, j;
+    ui_t i, j;
     const Colors::Define c_title(Colors::Id::FG_CYAN);
     const Colors::Define c_value(Colors::Id::FG_WHITE);
     const Colors::Define c_reset(Colors::Id::RESET);
@@ -71,7 +71,7 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
 }
 
 /**
- * @brief intend to match pca and covm reseult from online pca covm calculator
+ * @brief intend to match pca and covm results from online pca covm calculator
  * @url https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm
  * @url https://datatab.net/statistics-calculator/factor-analysis
  * 
@@ -114,5 +114,6 @@ int main(int argc, char **argv)
     fixt_s<double, 3, 6> fix3x6;
     fix_3x6(&fix3x6);
     pca(fix3x6);
+
     return 0;
 }
