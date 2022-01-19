@@ -1,24 +1,25 @@
 # PcaSdv
 
 Calculate :
-* Pca(Principal Component Analysis).
-* Svd(Singular Value Decomposition).
+
+* Pca(Principal Component Analysis). 
+* Svd(Singular Value Decomposition). 
 
 ## Requirements
 
-* CMake.
-* C++ compiler.
-* Boost lib.
+* CMake. 
+* C++ compiler. 
+* Boost lib. 
 
 ## Build
 
-```
+``` 
 ./build.sh
 ```
 
 ## Run
 
-```
+``` 
 ./build/pca
 ```
 
@@ -26,5 +27,6 @@ Calculate :
 
 @TODO Wip
 
-```
+``` 
 ./build/pca_test
+```
