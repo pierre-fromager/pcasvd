@@ -71,7 +71,7 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
 }
 
 /**
- * @brief intend to match pca and covm results from online pca covm calculator
+ * @brief intend to match pca and covm results with script matlhlab
  * @url https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm
  * @url https://datatab.net/statistics-calculator/factor-analysis
  * 

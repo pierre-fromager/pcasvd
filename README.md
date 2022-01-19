@@ -2,8 +2,8 @@
 
 Calculate :
 
-* Pca(Principal Component Analysis). 
-* Svd(Singular Value Decomposition). 
+* Pca (Principal Component Analysis). 
+* Svd (Singular Value Decomposition). 
 
 ## Requirements
 
