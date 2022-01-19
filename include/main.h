@@ -3,7 +3,7 @@
 #define MAIN_H
 
 #include <ostream>
-
+#include <array>
 #include <iostream>
 #include <iomanip>
 #include "colors.h"
@@ -17,14 +17,14 @@
 #define COV_MAT_TITLE "CovMatrix"
 #define COV_EIGEN_TITLE "EigenBasis"
 
-template <typename T>
+template <typename T, unsigned int NC, unsigned int NR>
 struct fixture_s
 {
-    unsigned int nbcol;
-    unsigned int nbrow;
-    T *values;
+    unsigned int nbcol = NC;
+    unsigned int nbrow = NR;
+    std::array<T, NC * NR> values;
 };
 
-typedef fixture_s<double> fixure_d_t;
+//typedef fixture_s<double> fixure_d_t;
 
 #endif

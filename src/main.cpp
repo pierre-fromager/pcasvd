@@ -1,8 +1,7 @@
 
 #include "main.h"
 
-static void
-dispm(
+static void dispm(
     std::string title,
     alglib::real_2d_array matvect,
     unsigned int nbrow,
@@ -18,57 +17,66 @@ dispm(
     }
 }
 
-fixure_d_t fixture_3x6(void)
+static void fixture_3x6(fixture_s<double, 3, 6> *fix)
 {
-    double values[18] = {1.0, 2.0, 3.0,
-                         1.0, 2.0, 3.0,
-                         1.0, 2.0, 3.0,
-                         1.0, 2.0, 3.0,
-                         1.0, 2.0, 3.0,
-                         1.0, 2.0, 3.0};
-    fixure_d_t fix = {3, 6, values};
-    return fix;
+    fix->nbcol = 3;
+    fix->nbrow = 6;
+    fix->values = {1.0, 2.0, 3.0,
+                   1.0, 2.0, 3.0,
+                   1.0, 2.0, 3.0,
+                   1.0, 2.0, 3.0,
+                   1.0, 2.0, 3.0,
+                   1.0, 2.0, 3.0};
 }
 
-fixure_d_t fixture_2x12(void)
+static void fixture_2x12(fixture_s<double, 2, 12> *fix)
 {
-    double values[24] = {33, 80,
-                         33, 82.5,
-                         34, 100.8,
-                         42, 90,
-                         29, 67,
-                         19, 60,
-                         50, 77,
-                         55, 77,
-                         31, 87,
-                         46, 70,
-                         36, 57,
-                         48, 64};
-    fixure_d_t fix = {2, 12, values};
-    return fix;
+    fix->nbcol = 2;
+    fix->nbrow = 12;
+    fix->values = {33, 80,
+                   33, 82.5,
+                   34, 100.8,
+                   42, 90,
+                   29, 67,
+                   19, 60,
+                   50, 77,
+                   55, 77,
+                   31, 87,
+                   46, 70,
+                   36, 57,
+                   48, 64};
 }
 
 /**
  * @brief https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm
  * 
  */
-static void pca()
+template <typename T, unsigned int NC, unsigned int NR>
+static void pca(fixture_s<T, NC, NR> fi)
 {
-    unsigned int i, j;
     alglib::real_2d_array ptInput, mcov;
-    fixure_d_t fix2x12 = fixture_2x12();
-    ptInput.setcontent(fix2x12.nbrow, fix2x12.nbcol, fix2x12.values);
-    covm(ptInput, fix2x12.nbrow, fix2x12.nbcol, mcov);
-    dispm(COV_MAT_TITLE, mcov, fix2x12.nbrow, fix2x12.nbcol);
-    alglib::ae_int_t info;
-    alglib::real_1d_array eigValues;
-    alglib::real_2d_array eigVectors;
-    pcabuildbasis(ptInput, fix2x12.nbrow, fix2x12.nbcol, info, eigValues, eigVectors);
-    dispm(COV_EIGEN_TITLE, eigVectors, fix2x12.nbrow, fix2x12.nbcol);
+    try
+    {
+        ptInput.setcontent(fi.nbrow, fi.nbcol, (T *)&fi.values);
+        dispm("check", ptInput, fi.nbrow, fi.nbcol);
+        covm(ptInput, fi.nbrow, fi.nbcol, mcov);
+        dispm(COV_MAT_TITLE, mcov, fi.nbrow, fi.nbcol);
+        alglib::ae_int_t info;
+        alglib::real_1d_array eigValues;
+        alglib::real_2d_array eigVectors;
+        pcabuildbasis(ptInput, fi.nbrow, fi.nbcol, info, eigValues, eigVectors);
+        dispm(COV_EIGEN_TITLE, eigVectors, fi.nbrow, fi.nbcol);
+    }
+    catch (alglib::ap_error e)
+    {
+        printf("error msg: %s\n", e.msg.c_str());
+    }
 }
 
 int main(int argc, char **argv)
 {
-    pca();
+    fixture_s<double, 2, 12> fix2x12;
+    fixture_2x12(&fix2x12);
+    pca(fix2x12);
     return 0;
 }
