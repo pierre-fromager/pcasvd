@@ -1,63 +1,39 @@
 
 #include "main.h"
 
-/**
- * @brief disp matrix(2d) with nbrow and nbcol constraints
- * 
- * @param title 
- * @param v 
- * @param nbrow 
- * @param nbcol 
- */
 static void dispm(
     std::string title,
     alglib::real_2d_array v,
     ui_t nbrow,
-    ui_t nbcol)
+    ui_t nbcol,
+    colormap_t colors)
 {
     ui_t i, j;
-    const Colors::Define c_title(Colors::Id::FG_CYAN);
-    const Colors::Define c_value(Colors::Id::FG_WHITE);
-    const Colors::Define c_reset(Colors::Id::RESET);
-    std::cout << TAB << c_title << title << c_reset << std::endl;
-    std::cout << c_value;
+    std::cout << TAB << colors.sub_title << title << colors.reset << std::endl;
+    std::cout << colors.values;
     for (j = 0; j < nbrow; j++)
     {
         for (i = 0; i < nbcol; i++)
             std::cout << std::setw(11) << std::left << TAB << v[j][i];
         std::cout << std::endl;
     }
-    std::cout << c_reset;
+    std::cout << colors.reset;
 }
 
-/**
- * @brief disp vector(1d) with nbcol constraints
- * 
- * @param title 
- * @param v 
- * @param nbcol 
- */
 static void dispv(
     std::string title,
     alglib::real_1d_array v,
-    ui_t nbcol)
+    ui_t nbcol,
+    colormap_t colors)
 {
     ui_t i;
-    const Colors::Define c_title(Colors::Id::FG_CYAN);
-    const Colors::Define c_value(Colors::Id::FG_WHITE);
-    const Colors::Define c_reset(Colors::Id::RESET);
-    std::cout << TAB << c_title << title << c_reset << std::endl;
-    std::cout << c_value;
+    std::cout << TAB << colors.sub_title << title << colors.reset << std::endl;
+    std::cout << colors.values;
     for (i = 0; i < nbcol; i++)
         std::cout << std::setw(11) << std::left << TAB << v[i];
-    std::cout << c_reset << std::endl;
+    std::cout << colors.reset << std::endl;
 }
 
-/**
- * @brief set a fixture with 2 colums and 12 rows
- * 
- * @param fix 
- */
 static void fix_2x12(fixt_s<double, 2, 12> *fix)
 {
     fix->nbcol = 2;
@@ -76,16 +52,8 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
                    48.0, 64.0};
 }
 
-/**
- * @brief intend to match pca and covm results with script matlhlab
- * @url https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm
- * @url https://datatab.net/statistics-calculator/factor-analysis
- * @url http://www.jybaudot.fr/Analdonnees/acpvarres.html
- * @url https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html
- * 
- */
 template <typename T, ui_t NC, ui_t NR>
-static void pca(fixt_s<T, NC, NR> fix)
+static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
 {
     try
     {
@@ -93,17 +61,17 @@ static void pca(fixt_s<T, NC, NR> fix)
         const ui_t c = fix.nbcol;
         alglib::real_2d_array ptInput, mcov, mcorr;
         ptInput.setcontent(r, c, (T *)&fix.values);
-        dispm(FIXTURE_DATA_TITLE, ptInput, r, c);
+        dispm(FIXTURE_DATA_TITLE, ptInput, r, c, colors);
         alglib::covm(ptInput, r, c, mcov);
-        dispm(COV_MAT_TITLE, mcov, c, c);
+        dispm(COV_MAT_TITLE, mcov, c, c, colors);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
-        dispm(COR_MAT_TITLE, mcorr, c, c);
+        dispm(COR_MAT_TITLE, mcorr, c, c, colors);
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
         alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
-        dispm(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
-        dispv(PCA_EIGEN_VALUES_TITLE, eigValues, c);
+        dispm(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c, colors);
+        dispv(PCA_EIGEN_VALUES_TITLE, eigValues, c, colors);
     }
     catch (alglib::ap_error e)
     {
@@ -111,15 +79,31 @@ static void pca(fixt_s<T, NC, NR> fix)
     }
 }
 
-int main(int argc, char **argv)
+static void init_colormap(colormap_t *colormap)
 {
     const Colors::Define c_title(Colors::Id::FG_GREEN);
+    const Colors::Define c_sub_title(Colors::Id::FG_CYAN);
+    const Colors::Define c_values(Colors::Id::FG_WHITE);
     const Colors::Define c_reset(Colors::Id::RESET);
+    Colors::Define &ctitle = const_cast<Colors::Define &>(c_title);
+    Colors::Define &csubtitle = const_cast<Colors::Define &>(c_sub_title);
+    Colors::Define &cvalues = const_cast<Colors::Define &>(c_values);
+    Colors::Define &creset = const_cast<Colors::Define &>(c_reset);
+    colormap->main_title = ctitle.to_str();
+    colormap->sub_title = csubtitle.to_str();
+    colormap->values = cvalues.to_str();
+    colormap->reset = creset.to_str();
+}
 
-    std::cout << c_title << FIXTURE_TITLE << SPACE << "2x12" << std::endl;
+int main(int argc, char **argv)
+{
+    colormap_t colors;
+    init_colormap(&colors);
+
+    std::cout << colors.main_title << FIXTURE_TITLE << SPACE << "2x12" << std::endl;
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
-    pca(fix2x12);
+    pca(fix2x12, colors);
 
     return 0;
 }

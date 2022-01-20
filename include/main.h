@@ -24,6 +24,13 @@
 
 typedef unsigned int ui_t;
 
+typedef struct colormap_s {
+    std::string main_title;
+    std::string sub_title;
+    std::string values;
+    std::string reset;
+} colormap_t;
+
 template <typename T, ui_t NC, ui_t NR>
 struct fixt_s
 {

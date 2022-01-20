@@ -36,6 +36,10 @@ private:
 
 public:
     Define(Id id) : cid(id) {}
+    std::string to_str(void)
+    {
+        return estart + std::to_string(cid) + estop;
+    }
     friend std::ostream &operator<<(std::ostream &os, const Define &def)
     {
         return os << def.estart << def.cid << def.estop;
