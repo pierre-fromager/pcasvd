@@ -2,7 +2,7 @@
 #include "main.h"
 
 /**
- * @brief disp vector with nbrow and nbcol constraints
+ * @brief disp matrix(2d) with nbrow and nbcol constraints
  * 
  * @param title 
  * @param v 
@@ -31,20 +31,26 @@ static void dispm(
 }
 
 /**
- * @brief set a fixture with 3 colums and 6 rows
+ * @brief disp vector(1d) with nbcol constraints
  * 
- * @param fix 
+ * @param title 
+ * @param v 
+ * @param nbcol 
  */
-static void fix_3x6(fixt_s<double, 3, 6> *fix)
+static void dispv(
+    std::string title,
+    alglib::real_1d_array v,
+    ui_t nbcol)
 {
-    fix->nbcol = 3;
-    fix->nbrow = 6;
-    fix->values = {1.0, 2.0, 3.0,
-                   1.0, 2.0, 3.0,
-                   1.0, 2.0, 3.0,
-                   1.0, 2.0, 3.0,
-                   1.0, 2.0, 3.0,
-                   1.0, 2.0, 3.0};
+    ui_t i;
+    const Colors::Define c_title(Colors::Id::FG_CYAN);
+    const Colors::Define c_value(Colors::Id::FG_WHITE);
+    const Colors::Define c_reset(Colors::Id::RESET);
+    std::cout << TAB << c_title << title << c_reset << std::endl;
+    std::cout << c_value;
+    for (i = 0; i < nbcol; i++)
+        std::cout << std::setw(11) << std::left << TAB << v[i];
+    std::cout << c_reset << std::endl;
 }
 
 /**
@@ -74,6 +80,8 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
  * @brief intend to match pca and covm results with script matlhlab
  * @url https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm
  * @url https://datatab.net/statistics-calculator/factor-analysis
+ * @url http://www.jybaudot.fr/Analdonnees/acpvarres.html
+ * @url https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html
  * 
  */
 template <typename T, ui_t NC, ui_t NR>
@@ -83,16 +91,19 @@ static void pca(fixt_s<T, NC, NR> fix)
     {
         const ui_t r = fix.nbrow;
         const ui_t c = fix.nbcol;
-        alglib::real_2d_array ptInput, mcov;
+        alglib::real_2d_array ptInput, mcov, mcorr;
         ptInput.setcontent(r, c, (T *)&fix.values);
         dispm(FIXTURE_DATA_TITLE, ptInput, r, c);
         alglib::covm(ptInput, r, c, mcov);
         dispm(COV_MAT_TITLE, mcov, c, c);
+        alglib::pearsoncorrm(ptInput, r, c, mcorr);
+        dispm(COR_MAT_TITLE, mcorr, c, c);
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
         alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
-        dispm(COV_EIGEN_TITLE, eigVectors, c, c);
+        dispm(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
+        dispv(PCA_EIGEN_VALUES_TITLE, eigValues, c);
     }
     catch (alglib::ap_error e)
     {
@@ -109,11 +120,6 @@ int main(int argc, char **argv)
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
     pca(fix2x12);
-
-    std::cout << c_title << FIXTURE_TITLE << SPACE << "3x6" << std::endl;
-    fixt_s<double, 3, 6> fix3x6;
-    fix_3x6(&fix3x6);
-    pca(fix3x6);
 
     return 0;
 }
