@@ -66,24 +66,27 @@ static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
         dispm(COV_MAT_TITLE, mcov, c, c, colors);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
         dispm(COR_MAT_TITLE, mcorr, c, c, colors);
+
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
         alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
         dispm(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c, colors);
         dispv(PCA_EIGEN_VALUES_TITLE, eigValues, c, colors);
-        alglib::ae_int_t eigValuesSum = 0;
+
+        T eigvaSum = 0;
         for (ui_t i = 0; i < c; i++)
-            eigValuesSum += eigValues[i];
+            eigvaSum += eigValues[i];
         std::cout << TAB << colors.sub_title
                   << "Explained variance (%)"
                   << colors.reset << std::endl;
         for (ui_t i = 0; i < c; i++)
             std::cout << TAB TAB << "P" << i << SPACE
-                      << (eigValues[i] / eigValuesSum) * 100
+                      << (eigValues[i] * 100 / eigvaSum)
                       << std::endl;
+
         alglib::real_1d_array w;
-        alglib::fisherlda(ptInput, r, c, 2, info, w);
+        alglib::fisherlda(ptInput, r, c, c, info, w);
         dispv("Lda", w, c, colors);
     }
     catch (alglib::ap_error e)

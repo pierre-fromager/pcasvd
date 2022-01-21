@@ -1,11 +1,10 @@
 # PcaSdv
 
-The idea is to calculate :
-* PCA(Principal Component Analysis) 
-* SVD(Singular Value Decomposition) 
-For the sake I want to check results with Boost unit tests.  
+The idea is to calculate 
 
-Here I use [Alglib for statistics computation](https://www.alglib.net/statistics) and I do cross check with Octave(for the math evaluation) then Boost lib.
+* PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis) 
+* SVD [fr](https://fr.wikipedia.org/wiki/D%C3%A9composition_en_valeurs_singuli%C3%A8res) (Singular Value Decomposition) 
+* LDA [fr](https://fr.wikipedia.org/wiki/Analyse_discriminante_lin%C3%A9aire) (Linear Discriminant Analysis) fisher method
 
 ## References
 
@@ -20,10 +19,11 @@ Here I use [Alglib for statistics computation](https://www.alglib.net/statistics
 
 ## Requirements
 
-* CMake. 
-* C++ compiler (g++). 
-* Alglib (included in). 
-* Boost lib. 
+* [CMake](https://cmake.org/). 
+* C++ compiler, here g++, [howto change it](https://stackoverflow.com/questions/45933732/how-to-specify-a-compiler-in-cmake) in [CMakeLists.txt](CMakeLists.txt). 
+* [Alglib](https://www.alglib.net). 
+* [Boost lib](https://www.boost.org/). 
+* [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 
 ## Build
 
