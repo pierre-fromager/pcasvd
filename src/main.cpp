@@ -91,7 +91,10 @@ static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
     }
     catch (alglib::ap_error e)
     {
-        printf(ALGLIB_ERR_MSG, e.msg.c_str());
+        std::cout << colors.error
+                  << ALGLIB_ERR_MSG << e.msg
+                  << colors.reset
+                  << std::endl;
     }
 }
 
@@ -100,10 +103,12 @@ static void init_colormap(colormap_t *colormap)
     const Colors::Define c_title(Colors::Id::FG_GREEN);
     const Colors::Define c_sub_title(Colors::Id::FG_CYAN);
     const Colors::Define c_values(Colors::Id::FG_WHITE);
+    const Colors::Define c_error(Colors::Id::FG_RED);
     const Colors::Define c_reset(Colors::Id::RESET);
     Colors::Define &ctitle = const_cast<Colors::Define &>(c_title);
     Colors::Define &csubtitle = const_cast<Colors::Define &>(c_sub_title);
     Colors::Define &cvalues = const_cast<Colors::Define &>(c_values);
+    Colors::Define &cerror = const_cast<Colors::Define &>(c_error);
     Colors::Define &creset = const_cast<Colors::Define &>(c_reset);
     colormap->main_title = ctitle.to_str();
     colormap->sub_title = csubtitle.to_str();

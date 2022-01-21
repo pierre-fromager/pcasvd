@@ -20,7 +20,7 @@
 #define PCA_EIGEN_VALUES_TITLE "Eigen values (vector)"
 #define FIXTURE_TITLE "Fixture"
 #define FIXTURE_DATA_TITLE FIXTURE_TITLE " datas (matrix)"
-#define ALGLIB_ERR_MSG "Alglib err msg: %s\n"
+#define ALGLIB_ERR_MSG "Alglib error : "
 
 typedef unsigned int ui_t;
 
@@ -28,6 +28,7 @@ typedef struct colormap_s {
     std::string main_title;
     std::string sub_title;
     std::string values;
+    std::string error;
     std::string reset;
 } colormap_t;
 
