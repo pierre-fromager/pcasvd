@@ -15,7 +15,11 @@ The idea is to calculate
  * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
  * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
 
-### SDV
+### SVD
+@todo Wip
+
+### LDA
+@todo Wip
 
 ## Requirements
 
@@ -37,6 +41,40 @@ The idea is to calculate
 ./build/pca
 ```
 
+## Sample output
+```
+Fixture 2x12
+	Fixture datas (matrix)
+	          33	          80
+	          33	          82.5
+	          34	          100.8
+	          42	          90
+	          29	          67
+	          19	          60
+	          50	          77
+	          55	          77
+	          31	          87
+	          46	          70
+	          36	          57
+	          48	          64
+	Covariance (matrix)
+	          106.727	          10.1182
+	          10.1182	          170.026
+	Correlation (matrix)
+	          1	          0.0751117
+	          0.0751117	          1
+	Eigen vectors (matrix)
+	          -0.154098	          -0.988056
+	          -0.988056	          0.154098
+	Eigen values (vector)
+	          171.604	          105.149
+	Explained variance (%)
+		P0 62.0061
+		P1 37.9939
+	Lda
+	          0.988056	          -0.154098
+
+```
 ## Testing
 
 @todo Wip
