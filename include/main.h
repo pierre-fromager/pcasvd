@@ -14,12 +14,12 @@
 #define STAR "*"
 #define SPACE " "
 #define DASH "-"
-#define COV_MAT_TITLE "Covariance matrix"
-#define COR_MAT_TITLE "Correlation matrix"
-#define PCA_EIGEN_VECTORS_TITLE "Eigen Vectors (Matrix)"
-#define PCA_EIGEN_VALUES_TITLE "Eigen Basis (Vector)"
+#define COV_MAT_TITLE "Covariance (matrix)"
+#define COR_MAT_TITLE "Correlation (matrix)"
+#define PCA_EIGEN_VECTORS_TITLE "Eigen vectors (matrix)"
+#define PCA_EIGEN_VALUES_TITLE "Eigen values (vector)"
 #define FIXTURE_TITLE "Fixture"
-#define FIXTURE_DATA_TITLE FIXTURE_TITLE " Datas"
+#define FIXTURE_DATA_TITLE FIXTURE_TITLE " datas (matrix)"
 #define ALGLIB_ERR_MSG "Alglib err msg: %s\n"
 
 typedef unsigned int ui_t;

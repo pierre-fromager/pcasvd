@@ -1,9 +1,11 @@
 # PcaSdv
 
-Calculate :
+The idea is to calculate :
+* PCA(Principal Component Analysis) 
+* SVD(Singular Value Decomposition) 
+For the sake I want to check results with Boost unit tests.  
 
-* Pca (Principal Component Analysis). 
-* Svd (Singular Value Decomposition). 
+Here I use [Alglib for statistics computation](https://www.alglib.net/statistics) and I do cross check with Octave(for the math evaluation) then Boost lib.
 
 ## References
 
@@ -19,18 +21,19 @@ Calculate :
 ## Requirements
 
 * CMake. 
-* C++ compiler. 
+* C++ compiler (g++). 
+* Alglib (included in). 
 * Boost lib. 
 
 ## Build
 
-``` 
+```
 ./build.sh
 ```
 
 ## Run
 
-``` 
+```
 ./build/pca
 ```
 
@@ -38,6 +41,6 @@ Calculate :
 
 @todo Wip
 
-``` 
+```
 ./build/pca_test
 ```
