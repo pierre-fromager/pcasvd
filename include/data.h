@@ -2,7 +2,6 @@
 #ifndef DATA_H
 #define DATA_H
 
-
 #include <string>
 #include <iterator>
 #include <iostream>
@@ -10,10 +9,8 @@
 #include <sstream>
 #include <vector>
 #include <type_traits>
-#include <boost/algorithm/string/classification.hpp> // Include boost::for is_any_of
-#include <boost/algorithm/string/split.hpp> // Include for boost::split
-//#include <algorithm>
-
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 #define TAB "\t"
 #define COMA ","
