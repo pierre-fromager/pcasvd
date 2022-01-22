@@ -1,5 +1,6 @@
 
 #include "main.h"
+#include "data.h"
 
 static void dispm(
     std::string title,
@@ -120,6 +121,16 @@ int main(int argc, char **argv)
 {
     colormap_t colors;
     init_colormap(&colors);
+
+    Data::File::Csv<double> *csv = new Data::File::Csv<double>(";");
+    const std::string filename = "./script/mathlab/gsaw.csv";
+    csv->load(filename, 1);
+    Data::File::metas_t metas = csv->metas();
+    std::cout << "filename:" << metas.filename << std::endl
+              << "separator:" << metas.sep << std::endl
+              << "cols:" << metas.cols << std::endl
+              << "rows:" << metas.rows << std::endl;
+    delete (csv);
 
     std::cout << colors.main_title << FIXTURE_TITLE << SPACE << "2x12" << std::endl;
     fixt_s<double, 2, 12> fix2x12;

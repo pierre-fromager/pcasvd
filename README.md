@@ -15,11 +15,13 @@ The idea is to calculate
  * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
  * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
 
-### SVD
+
+### SDV
 @todo Wip
 
 ### LDA
-@todo Wip
+
+ * [Difference between LDA and PCA](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
 
 ## Requirements
 
