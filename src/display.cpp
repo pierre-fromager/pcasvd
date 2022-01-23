@@ -1,8 +1,6 @@
 
 #include <display.h>
 
-using namespace std;
-
 Display::Display(colormap_t colors) : m_colors(colors) {}
 
 Display::~Display() {}
@@ -11,17 +9,20 @@ void Display::mat(string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol,
 {
     ui_t i, j;
     this->subtitle(title);
-    cout << m_colors.values;
+    this->print(m_colors.values, SVOID, false);
     const ui_t nbrows = (maxrow != 0) ? maxrow : nbrow;
     for (j = 0; j < nbrows; j++)
     {
         for (i = 0; i < nbcol; i++)
-            cout << setw(DISP_PAD_LEFT) << left << TAB << v[j][i];
-        cout << endl;
+            this->printvalue(v[j][i]);
+        this->print(SVOID, SVOID, false, true);
     }
-    if (maxrow != 0) 
-        cout << setw(DISP_PAD_LEFT) << left << TAB  << "..." << endl;
-    cout << m_colors.reset;
+    if (maxrow != 0)
+    {
+        cout << setw(DISP_PAD_LEFT) << left << TAB;
+        this->print(SVOID, TFOLLOW, false, false);
+    }
+    this->print(SVOID, SVOID, true, true);
 }
 
 void Display::vec(string title, alglib::real_1d_array v, ui_t nbcol)
@@ -30,21 +31,35 @@ void Display::vec(string title, alglib::real_1d_array v, ui_t nbcol)
     this->subtitle(title);
     cout << m_colors.values;
     for (i = 0; i < nbcol; i++)
-        cout << setw(DISP_PAD_LEFT) << left << TAB << v[i];
-    cout << m_colors.reset << endl;
+        this->printvalue(v[i]);
+    this->print(SVOID, SVOID, true, true);
 }
 
 void Display::title(std::string title)
 {
-    cout << m_colors.main_title << title << m_colors.reset << endl;
+    this->print(m_colors.main_title, title);
 }
 
 void Display::subtitle(std::string title)
 {
-    cout << TAB << m_colors.sub_title << title << m_colors.reset << endl;
+    this->print(m_colors.sub_title, TAB + title);
 }
 
 void Display::error(std::string title)
 {
-    cout << TAB << m_colors.error << title << m_colors.reset << endl;
+    this->print(m_colors.error, TAB + title);
+}
+
+void Display::print(std::string color, string line, bool rset, bool end)
+{
+    cout << color << line;
+    if (rset)
+        cout << m_colors.reset;
+    if (end)
+        cout << endl;
+}
+
+void Display::printvalue(double v)
+{
+    cout << setw(DISP_PAD_LEFT) << left << TAB << v;
 }
