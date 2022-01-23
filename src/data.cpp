@@ -29,8 +29,7 @@ void Csv<T>::load(std::string f, unsigned int skip)
     std::string line;
     std::vector<std::string> sitems;
     size_t cpt;
-    unsigned int nbrow = 0;
-    unsigned int nbcol = 0;
+    unsigned int nbrow = 0, nbcol = 0;
     const bool isFloat = std::is_same<T, double>::value || std::is_same<T, float>::value;
     const bool isInt = std::is_same<T, int>::value;
     if (is.is_open())
@@ -64,6 +63,12 @@ template <typename T>
 void Csv<T>::save(std::string f)
 {
     m_filename = f;
+}
+
+template <typename T>
+std::vector<T> Csv<T>::buffer(void)
+{
+    return m_buffer;
 }
 
 template <typename T>

@@ -1,39 +1,18 @@
 
 #include "main.h"
 #include "data.h"
+#include "display.h"
+#include "colors.h"
+#include "alglib/statistics.h"
+#include "alglib/dataanalysis.h"
 
-static void dispm(
-    std::string title,
-    alglib::real_2d_array v,
-    ui_t nbrow,
-    ui_t nbcol,
-    colormap_t colors)
+template <typename T, ui_t NC, ui_t NR>
+struct fixt_s
 {
-    ui_t i, j;
-    std::cout << TAB << colors.sub_title << title << colors.reset << std::endl;
-    std::cout << colors.values;
-    for (j = 0; j < nbrow; j++)
-    {
-        for (i = 0; i < nbcol; i++)
-            std::cout << std::setw(11) << std::left << TAB << v[j][i];
-        std::cout << std::endl;
-    }
-    std::cout << colors.reset;
-}
-
-static void dispv(
-    std::string title,
-    alglib::real_1d_array v,
-    ui_t nbcol,
-    colormap_t colors)
-{
-    ui_t i;
-    std::cout << TAB << colors.sub_title << title << colors.reset << std::endl;
-    std::cout << colors.values;
-    for (i = 0; i < nbcol; i++)
-        std::cout << std::setw(11) << std::left << TAB << v[i];
-    std::cout << colors.reset << std::endl;
-}
+    ui_t nbcol = NC;
+    ui_t nbrow = NR;
+    std::array<T, NC * NR> values;
+};
 
 static void fix_2x12(fixt_s<double, 2, 12> *fix)
 {
@@ -54,7 +33,7 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
 }
 
 template <typename T, ui_t NC, ui_t NR>
-static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
+static void pca(fixt_s<T, NC, NR> fix, Display *disp)
 {
     try
     {
@@ -62,25 +41,24 @@ static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
         const ui_t c = fix.nbcol;
         alglib::real_2d_array ptInput, mcov, mcorr;
         ptInput.setcontent(r, c, (T *)&fix.values);
-        dispm(FIXTURE_DATA_TITLE, ptInput, r, c, colors);
+        disp->mat(FIXTURE_DATA_TITLE, ptInput, r, c);
         alglib::covm(ptInput, r, c, mcov);
-        dispm(COV_MAT_TITLE, mcov, c, c, colors);
+        disp->mat(COV_MAT_TITLE, mcov, c, c);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
-        dispm(COR_MAT_TITLE, mcorr, c, c, colors);
+        disp->mat(COR_MAT_TITLE, mcorr, c, c);
 
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
         alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
-        dispm(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c, colors);
-        dispv(PCA_EIGEN_VALUES_TITLE, eigValues, c, colors);
+        disp->mat(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
+        disp->vec(PCA_EIGEN_VALUES_TITLE, eigValues, c);
 
         T eigvaSum = 0;
         for (ui_t i = 0; i < c; i++)
             eigvaSum += eigValues[i];
-        std::cout << TAB << colors.sub_title
-                  << "Explained variance (%)"
-                  << colors.reset << std::endl;
+
+        disp->title("Explained variance (%)");
         for (ui_t i = 0; i < c; i++)
             std::cout << TAB TAB << "P" << i << SPACE
                       << (eigValues[i] * 100 / eigvaSum)
@@ -88,14 +66,11 @@ static void pca(fixt_s<T, NC, NR> fix, colormap_t colors)
 
         alglib::real_1d_array w;
         alglib::fisherlda(ptInput, r, c, c, info, w);
-        dispv("Lda", w, c, colors);
+        disp->vec("Lda", w, c);
     }
     catch (alglib::ap_error e)
     {
-        std::cout << colors.error
-                  << ALGLIB_ERR_MSG << e.msg
-                  << colors.reset
-                  << std::endl;
+        disp->error(ALGLIB_ERR_MSG + e.msg);
     }
 }
 
@@ -133,11 +108,12 @@ int main(int argc, char **argv)
 {
     colormap_t colors;
     init_colormap(&colors);
+    Display *disp = new Display(colors);
     csv_metas("./script/matlab/gsaw.csv");
     std::cout << colors.main_title << FIXTURE_TITLE << SPACE << "2x12" << std::endl;
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
-    pca(fix2x12, colors);
-
+    pca(fix2x12, disp);
+    delete(disp);
     return 0;
 }

@@ -38,6 +38,7 @@ public:
     ~Csv();
     void load(std::string filename,unsigned int skip = 0);
     void save(std::string filename);
+    std::vector<T> buffer(void);
     metas_t metas(void);
 
 private:

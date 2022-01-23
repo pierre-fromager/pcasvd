@@ -4,6 +4,14 @@
 
 #include <ostream>
 
+typedef struct colormap_s {
+    std::string main_title;
+    std::string sub_title;
+    std::string values;
+    std::string error;
+    std::string reset;
+} colormap_t;
+
 namespace Colors
 {
 enum Id
