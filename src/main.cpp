@@ -40,7 +40,7 @@ static void fix_csv_4x12(std::string filename, fixt_s<double, 4, 12> *fix)
     Data::File::metas_t metas = csv->metas();
     fix->nbcol = metas.cols;
     fix->nbrow = metas.rows;
-    const unsigned int nbItems = fix->nbcol * fix->nbrow;
+    const ui_t nbItems = fix->nbcol * fix->nbrow;
     std::copy_n(csv->buffer().begin(), nbItems, fix->values.begin());
     delete (csv);
 }
