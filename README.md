@@ -55,7 +55,7 @@ I decide to export (Acceleration,Horsepower,MPG)
 MYEXPORT = [Acceleration,Horsepower,MPG]
 ```
 
-Time to check (then hunt NaN no CheeseNan) to ensure all datas to be correctly set.  
+Time to check to ensure all datas to be correctly set (NaN hunt).  
 
 ```
 tmpname = filename(1:length(filename)-3)
@@ -64,6 +64,8 @@ save(csvname, "MYEXPORT")
 ```
 
 Just done, no cry, edit csv file to check header struct (may be verbose), remove pointless lines if necessary.  
+Fixing NaN can be done replacing NaN to 0.  
+Fixing separator can be done replacing default space delimiter to the required one.  
 
 ## Build
 
