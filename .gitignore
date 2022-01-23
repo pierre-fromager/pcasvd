@@ -1,10 +1,5 @@
 *.o
 doc/html
-hbp
-doc/html
 callgrind.*
 .~lock.*
-*.csv
-*.dat
-log.txt
 build
