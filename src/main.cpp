@@ -1,10 +1,11 @@
 
-#include "main.h"
-#include "data.h"
-#include "display.h"
-#include "colors.h"
-#include "alglib/statistics.h"
-#include "alglib/dataanalysis.h"
+#include <main.h>
+#include <data.h>
+#include <colors.h>
+#include <colormap.h>
+#include <display.h>
+#include <alglib/statistics.h>
+#include <alglib/dataanalysis.h>
 
 template <typename T, ui_t NC, ui_t NR>
 struct fixt_s
@@ -58,7 +59,7 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
         for (ui_t i = 0; i < c; i++)
             eigvaSum += eigValues[i];
 
-        disp->title("Explained variance (%)");
+        disp->subtitle("Explained variance (%)");
         for (ui_t i = 0; i < c; i++)
             std::cout << TAB TAB << "P" << i << SPACE
                       << (eigValues[i] * 100 / eigvaSum)
@@ -97,10 +98,10 @@ static void csv_metas(const std::string &filename)
     Data::File::Csv<double> *csv = new Data::File::Csv<double>(SEMICOLON);
     csv->load(filename, 1);
     Data::File::metas_t metas = csv->metas();
-    std::cout << "filename : " << metas.filename << std::endl
-              << "separator : " << metas.sep << std::endl
-              << "cols : " << metas.cols << std::endl
-              << "rows : " << metas.rows << std::endl;
+    std::cout << TAB << "filename : " << metas.filename << std::endl
+              << TAB << "separator : " << metas.sep << std::endl
+              << TAB << "cols : " << metas.cols << std::endl
+              << TAB << "rows : " << metas.rows << std::endl;
     delete (csv);
 }
 
@@ -109,11 +110,12 @@ int main(int argc, char **argv)
     colormap_t colors;
     init_colormap(&colors);
     Display *disp = new Display(colors);
+    disp->title("Metas csv");
     csv_metas("./script/matlab/gsaw.csv");
-    std::cout << colors.main_title << FIXTURE_TITLE << SPACE << "2x12" << std::endl;
+    disp->title("Fixture 2x12");
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
     pca(fix2x12, disp);
-    delete(disp);
+    delete (disp);
     return 0;
 }

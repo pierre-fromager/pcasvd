@@ -3,16 +3,17 @@
 #define DISPLAY_H
 
 #include <string>
-#include <iterator>
 #include <iostream>
 #include <iomanip>
 #include <colors.h>
-#include "alglib/ap.h"
+#include <colormap.h>
+#include <alglib/ap.h>
 
 #define TAB "\t"
 #define COMA ","
 #define SEMICOLON ";"
 #define SPACE " "
+#define DISP_PAD_LEFT 11
 
 typedef unsigned int ui_t;
 
@@ -24,6 +25,7 @@ public:
     void mat(std::string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol);
     void vec(std::string title, alglib::real_1d_array v, ui_t nbcol);
     void title(std::string title);
+    void subtitle(std::string stitle);
     void error(std::string title);
 
 private:

@@ -1,16 +1,8 @@
 
-#ifndef CONSOLE_COLOR_H
-#define CONSOLE_COLOR_H
+#ifndef COLORS_H
+#define COLORS_H
 
 #include <ostream>
-
-typedef struct colormap_s {
-    std::string main_title;
-    std::string sub_title;
-    std::string values;
-    std::string error;
-    std::string reset;
-} colormap_t;
 
 namespace Colors
 {
