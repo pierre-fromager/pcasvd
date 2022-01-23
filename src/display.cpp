@@ -7,17 +7,20 @@ Display::Display(colormap_t colors) : m_colors(colors) {}
 
 Display::~Display() {}
 
-void Display::mat(string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol)
+void Display::mat(string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol, ui_t maxrow)
 {
     ui_t i, j;
     this->subtitle(title);
     cout << m_colors.values;
-    for (j = 0; j < nbrow; j++)
+    const ui_t nbrows = (maxrow != 0) ? maxrow : nbrow;
+    for (j = 0; j < nbrows; j++)
     {
         for (i = 0; i < nbcol; i++)
             cout << setw(DISP_PAD_LEFT) << left << TAB << v[j][i];
         cout << endl;
     }
+    if (maxrow != 0) 
+        cout << setw(DISP_PAD_LEFT) << left << TAB  << "..." << endl;
     cout << m_colors.reset;
 }
 

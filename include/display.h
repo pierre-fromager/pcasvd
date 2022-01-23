@@ -22,7 +22,7 @@ class Display
 public:
     Display(colormap_t colors);
     ~Display();
-    void mat(std::string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol);
+    void mat(std::string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol, ui_t maxrow = 0);
     void vec(std::string title, alglib::real_1d_array v, ui_t nbcol);
     void title(std::string title);
     void subtitle(std::string stitle);

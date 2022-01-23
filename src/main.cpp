@@ -52,9 +52,10 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
     {
         const ui_t r = fix.nbrow;
         const ui_t c = fix.nbcol;
+        const ui_t maxrow = 5;
         alglib::real_2d_array ptInput, mcov, mcorr;
         ptInput.setcontent(r, c, (T *)&fix.values);
-        disp->mat(FIXTURE_DATA_TITLE, ptInput, r, c);
+        disp->mat(FIXTURE_DATA_TITLE, ptInput, r, c, maxrow);
         alglib::covm(ptInput, r, c, mcov);
         disp->mat(COV_MAT_TITLE, mcov, c, c);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
