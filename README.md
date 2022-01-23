@@ -48,17 +48,17 @@ Checking the workspace panel I can see variables name
 * Horsepower
 * MPG
 * ...
-I decide to export (Acceleration,Horsepower,MPG)
+I decide to export (Acceleration,Horsepower,MPG)  
 ```
 MYEXPORT = [Acceleration,Horsepower,MPG]
 ```
-Time to check (then hunt NaN no CheeseNan) to ensure all datas to be correctly set.
+Time to check (then hunt NaN no CheeseNan) to ensure all datas to be correctly set.  
 ```
 tmpname = filename(1:length(filename)-3)
 csvname = strcat(tmpname, 'csv')
 save(csvname, "MYEXPORT")
 ```
-Just done, no cry, edit csv file to check header struct (may be verbose), remove pointless lines if necessary.
+Just done, no cry, edit csv file to check header struct (may be verbose), remove pointless lines if necessary.  
 
 ## Build
 
