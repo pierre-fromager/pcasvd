@@ -33,6 +33,18 @@ static void fix_2x12(fixt_s<double, 2, 12> *fix)
                    48.0, 64.0};
 }
 
+static void fix_csv_4x12(std::string filename, fixt_s<double, 4, 12> *fix)
+{
+    Data::File::Csv<double> *csv = new Data::File::Csv<double>(SEMICOLON);
+    csv->load(filename, 1);
+    Data::File::metas_t metas = csv->metas();
+    fix->nbcol = metas.cols;
+    fix->nbrow = metas.rows;
+    const unsigned int nbItems = fix->nbcol * fix->nbrow;
+    std::copy_n(csv->buffer().begin(), nbItems, fix->values.begin());
+    delete (csv);
+}
+
 template <typename T, ui_t NC, ui_t NR>
 static void pca(fixt_s<T, NC, NR> fix, Display *disp)
 {
@@ -93,29 +105,19 @@ static void init_colormap(colormap_t *colormap)
     colormap->reset = creset.to_str();
 }
 
-static void csv_metas(const std::string &filename)
-{
-    Data::File::Csv<double> *csv = new Data::File::Csv<double>(SEMICOLON);
-    csv->load(filename, 1);
-    Data::File::metas_t metas = csv->metas();
-    std::cout << TAB << "filename : " << metas.filename << std::endl
-              << TAB << "separator : " << metas.sep << std::endl
-              << TAB << "cols : " << metas.cols << std::endl
-              << TAB << "rows : " << metas.rows << std::endl;
-    delete (csv);
-}
-
 int main(int argc, char **argv)
 {
     colormap_t colors;
     init_colormap(&colors);
     Display *disp = new Display(colors);
-    disp->title("Metas csv");
-    csv_metas("./script/matlab/gsaw.csv");
     disp->title("Fixture 2x12");
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
     pca(fix2x12, disp);
+    fixt_s<double, 4, 12> fixcsv4x12;
+    fix_csv_4x12(FIXT_CSV_FILE_GSAW, &fixcsv4x12);
+    disp->title("Fixture Csv gsaw 4x12");
+    pca(fixcsv4x12, disp);
     delete (disp);
     return 0;
 }
