@@ -64,7 +64,7 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
-        alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
+        alglib::pcabuildbasis(mcorr, c, c, info, eigValues, eigVectors);
         disp->mat(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
         disp->vec(PCA_EIGEN_VALUES_TITLE, eigValues, c);
 

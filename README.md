@@ -14,6 +14,7 @@ The idea is to calculate
  * [Online Statistics Calculator](https://datatab.net/statistics-calculator/factor-analysis)
  * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
  * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
+ * [Jérome Pages - AgroCampus](https://www.youtube.com/watch?v=uV5hmpzmWsU)
 
 
 ### SDV
