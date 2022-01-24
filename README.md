@@ -16,7 +16,6 @@ The idea is to calculate
  * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
  * [Jérome Pages - AgroCampus](https://www.youtube.com/watch?v=uV5hmpzmWsU)
 
-
 ### SDV
 @todo Wip
 
@@ -32,10 +31,20 @@ The idea is to calculate
 * [Boost lib](https://www.boost.org/). 
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 
+## Fixtures
+Hereby
+* [2x12 inline](src/main.cpp)
+* [4x12 pop(gender/salary/age/weight) csv](script/matlab/gsaw.csv)
+* [6x23 bovins(vif/carcasse/quality/total/gras/os) csv](script/matlab/bovin.csv)
 
-## Datas
+Sources  
 
-### Convert .mat to .csv
+* [2x12 (age/weight)](https://datatab.net/statistics-calculator/factor-analysis)
+* [bovins (@see above)](https://cermics.enpc.fr/scilab_new/site/Tp/Statistique/acp/acp.html)
+
+## Fixtures datas conversion
+
+### Convert .mat to .csv with cherry pick
 Converting matlab to csv file is quite easy from **Ocatve** command line.  
 Example carbig  
 ```

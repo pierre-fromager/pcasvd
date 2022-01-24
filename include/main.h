@@ -12,5 +12,6 @@
 #define FIXTURE_DATA_TITLE FIXTURE_TITLE " datas (matrix)"
 #define ALGLIB_ERR_MSG "Alglib error : "
 #define FIXT_CSV_FILE_GSAW "./script/matlab/gsaw.csv"
+#define FIXT_CSV_FILE_BOVIN "./script/matlab/bovin.csv"
 
 #endif

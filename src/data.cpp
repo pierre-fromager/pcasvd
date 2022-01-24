@@ -42,7 +42,7 @@ void Csv<T>::load(std::string f, unsigned int skip)
                 boost::is_any_of(m_separator),
                 boost::token_compress_on);
             const size_t sitemsSize = sitems.size();
-            nbrow++;
+            
             if (nbrow > skip)
             {
                 m_lines.push_back(line);
@@ -53,6 +53,7 @@ void Csv<T>::load(std::string f, unsigned int skip)
                         m_buffer.push_back(atoi(sitems[cpt].c_str()));
                 m_metas.cols = cpt;
             }
+            nbrow++;
         }
         m_metas.rows = m_lines.size();
         is.close();
