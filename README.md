@@ -2,8 +2,8 @@
 
 The idea is to calculate 
 
-* PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis) 
- * [Difference between LDA and PCA](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
+* PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis)
+* [Difference between LDA and PCA](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
 
 ## References
 
@@ -12,11 +12,13 @@ The idea is to calculate
 #### Tools
  * [Online Statistics Calculator](https://datatab.net/statistics-calculator/factor-analysis)
 * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
+
 #### Interpret
  * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
  
 #### Presentation (video)
  * [Jérome Pages - AgroCampus](https://www.youtube.com/watch?v=uV5hmpzmWsU)
+ 
 #### Questions
  * [Best way to let pca be normalized](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
 
