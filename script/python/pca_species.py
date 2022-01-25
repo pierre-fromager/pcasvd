@@ -14,14 +14,16 @@ species = pd.DataFrame(species)
 
 # Calcul de la matrice de covariance 
 cov_matrix = data.cov()
+print("Covariance matrix")
+print(cov_matrix)
 
 # Calcul des vecteurs et valeurs propres de la matrice de covariance 
 eigen_values, eigen_vectors = LA.eig(cov_matrix)
 
-print("eigen_vectors")
+print("Eigen vectors")
 print(eigen_vectors)
 
-print("eigen_values")
+print("Eigen values")
 print(eigen_values)
 
 # Calcul de l'information récupéré en pourcentage sur les 2 premiers axes
@@ -36,6 +38,9 @@ data_t = data.dot(projection_matrix)
 # Affichage des nouvelles données à 2 dimensions
 data_t.columns = ["axe1", "axe2"]
 data_t["species"] = species
+
+print("Projection species")
+print(data_t["species"])
 
 chart = alt.Chart(data_t).mark_point().encode(
     x=alt.X("axe1", title=f"axe 1 {axe1_info}%"), 

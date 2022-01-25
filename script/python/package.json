@@ -1,12 +1,13 @@
 {
-  "name": "python",
+  "name": "pycpa",
   "version": "1.0.0",
-  "description": "",
+  "description": "python cpa",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["python","pca"],
   "author": "",
-  "license": "ISC"
+  "license": "UNLICENSED",
+  "private": true
 }
