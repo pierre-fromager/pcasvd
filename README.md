@@ -9,25 +9,30 @@ Thus a [Matlab/Octave](./script/matlab/README.md) part is available to crosschec
 ## Features
 
 * PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis)
-* [Difference between LDA and PCA](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
+* [Difference between LDA and PCA (en)](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
 
 ## References
 
 ### PCA
 
+#### Presentation
+ * [Jérome Pages - AgroCampus (fr)](https://www.youtube.com/watch?v=uV5hmpzmWsU)
+
 #### Tools
 
-* [Online Statistics Calculator](https://datatab.net/statistics-calculator/factor-analysis)
-* [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
+* [Online Statistics Calculator (en)](https://datatab.net/statistics-calculator/factor-analysis)
+* [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave (en)](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
 
-#### Interpret
- * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
- 
-#### Presentation
- * [Jérome Pages - AgroCampus](https://www.youtube.com/watch?v=uV5hmpzmWsU)
+### Pca explaination
+
+* [Math explained PCA](https://www.youtube.com/watch?v=FgakZw6K1QQ)
+
+#### Interpretation
+* [Interprétation d'une ACP sur les variables (fr)](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
+* [L'analyse en composante principale (fr)](https://dridk.me/analyse-en-composante-principale.html)
 
 #### Questions
- * [Best way to let pca be normalized](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
+ * [Best way to let pca be normalized (en)](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
 
 ## Fixtures (datasets)
 Hereby
