@@ -2,15 +2,14 @@ FROM python:3.9-slim-bullseye
 LABEL Maintainer="pierre.fromager"
 # System context
 USER root
-RUN apt-get update
+RUN apt-get update && apt-get upgrade -y
 RUN apt-get install curl -y
 RUN apt-get install fontconfig -y
 RUN apt-get install vim -y
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get -y install nodejs
 # User context
-RUN adduser pca
-RUN usermod -aG sudo pca
+RUN adduser --disabled-password --gecos "" pca
 USER pca
 ENV MY_HOME /home/pca
 WORKDIR ${MY_HOME}

@@ -2,5 +2,6 @@ numpy
 pandas
 altair
 altair_saver
-numpy
 sklearn
+mlxtend
+matplotlib
