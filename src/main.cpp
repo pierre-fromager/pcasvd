@@ -79,7 +79,7 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
         alglib::pcabuildbasis(mcorr, c, c, info, eigValues, eigVectors);
         disp->mat(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
         disp->vec(PCA_EIGEN_VALUES_TITLE, eigValues, c);
-        /*
+        
         T eigvaSum = 0;
         for (ui_t i = 0; i < c; i++)
             eigvaSum += eigValues[i];
@@ -92,7 +92,7 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
 
         alglib::real_1d_array w;
         alglib::fisherlda(ptInput, r, c, c, info, w);
-        disp->vec("Lda", w, c);*/
+        disp->vec("Lda", w, c);
     }
     catch (alglib::ap_error e)
     {
@@ -123,17 +123,17 @@ int main(int argc, char **argv)
     colormap_t colors;
     init_colormap(&colors);
     Display *disp = new Display(colors);
-    /*
+   
     disp->title("Fixture 2x12");
     fixt_s<double, 2, 12> fix2x12;
     fix_2x12(&fix2x12);
     pca(fix2x12, disp);
-
+ 
     fixt_s<double, 4, 12> fixcsv4x12;
     fix_csv_4x12(FIXT_CSV_FILE_GSAW, &fixcsv4x12);
     disp->title("Fixture Csv gsaw 4x12");
     pca(fixcsv4x12, disp);
-*/
+
     fixt_s<double, 6, 23> fixcsvbovin6x23;
     fix_csv_bovin_6x23(FIXT_CSV_FILE_BOVIN, &fixcsvbovin6x23);
     disp->title("Fixture Csv bovin 6x23");

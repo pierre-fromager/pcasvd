@@ -63,7 +63,7 @@ void Display::printvalue(double v)
 {
     //double fmtv = sprintf("%lf",v);
     char fmt_value[12];
-    sprintf(fmt_value, "%08.4lf", v);
+    sprintf(fmt_value, "%08.6lf", v);
     // cout << std::setw(15) << std::setfill('0') << fmt_value;
     cout << TAB << fmt_value;
 }

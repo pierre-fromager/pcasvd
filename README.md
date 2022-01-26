@@ -1,6 +1,12 @@
 # Pca
 
-The idea is to calculate 
+The idea is to propose most used primitives for Quantitative analysis (QA).  
+Many of these features yet exists in Python modules, but python may be slow for huge calculus.  
+The c++ code is a backend to handle large scale calculus.  
+The python part through the [Docker image](./script/python/README.md) can be used to plot and or to crosscheck results directly or from the backend.  
+Thus a [Matlab/Octave](./script/matlab/README.md) part is available to crosscheck, some script can be used to generate graphics.
+
+## Features
 
 * PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis)
 * [Difference between LDA and PCA](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
@@ -10,15 +16,16 @@ The idea is to calculate
 ### PCA
 
 #### Tools
- * [Online Statistics Calculator](https://datatab.net/statistics-calculator/factor-analysis)
+
+* [Online Statistics Calculator](https://datatab.net/statistics-calculator/factor-analysis)
 * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
 
 #### Interpret
  * [Interprétation d'une ACP sur les variables](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
  
-#### Presentation (video)
+#### Presentation
  * [Jérome Pages - AgroCampus](https://www.youtube.com/watch?v=uV5hmpzmWsU)
- 
+
 #### Questions
  * [Best way to let pca be normalized](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
 
