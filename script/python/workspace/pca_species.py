@@ -1,5 +1,6 @@
-import numpy as np 
-import pandas as pd
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import altair as alt
 from numpy import linalg as LA
 from sklearn import datasets

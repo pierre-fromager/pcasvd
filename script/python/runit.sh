@@ -2,4 +2,4 @@
 
 wpath=$(pwd)/workspace
 cwpath=/home/pca/workspace
-docker run -v $wpath:$cwpath pypca:0.0.1
+docker run -i -t -v $wpath:$cwpath pypca:0.0.1 /bin/bash
