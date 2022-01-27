@@ -1,10 +1,36 @@
 # Pca
 
-The idea is to propose most used primitives for Quantitative analysis (QA).  
-Many of these features yet exists in Python modules, but python may be slow for huge calculus.  
-The c++ code is a backend to handle large scale calculus.  
-The python part through the [Docker image](./script/python/README.md) can be used to plot and or to crosscheck results directly or from the backend.  
-Thus a [Matlab/Octave](./script/matlab/README.md) part is available to crosscheck, some script can be used to generate graphics.
+May be you are familiar with spreadsheets and dynamic cross tables tools to compare columns behaviours as sum,means...but what happens if you have about a thousand columns, you will need a more synthetic view of your datas.  
+
+**Pca**(Principal Component Analysis) is a method attached to Quantitative analysis (QA) branch.  
+
+It performs multidimensional analysis (Rk space), considering "Components" as columns of a datasets.  
+
+Behaviours are calculated as covariance or correlation and represented as 2d square matrix.   
+Many of these features yet exists in Python modules, but python may be slow on wide datasets.
+
+
+The c++ code is a backend to handle large datasets with a best time response.  
+Python part [Docker image](./script/python/README.md) can be used to plot and or to crosscheck results directly or from the backend.  
+
+[Matlab/Octave](./script/matlab/README.md) part is available to crosscheck, some 
+scripts can be used to generate graphics.
+
+## Lexical
+
+Pre-processing
+* Covariance matrix is the dispersion matrix of a dataset.  
+* Correlation matrix is a covariance scaled matrix (identified by diagonal set to 1).  
+
+Svd (Single values decomposition) is the Eigen process applied to a matrix, it returns values and vectors.
+
+Consider 2 forms of Pca
+* covariance based  (Svd on unscaled matrix).
+* correlation based (Svd on scaled matrix).
+
+As you may notice 
+* covariance is lossless with a wide dispersion.
+* correlation is lossy with scaled dispersion.
 
 ## Features
 
