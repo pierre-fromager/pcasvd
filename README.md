@@ -16,6 +16,10 @@ Python part [Docker image](./script/python/README.md) can be used to plot and or
 [Matlab/Octave](./script/matlab/README.md) part is available to crosscheck, some 
 scripts can be used to generate graphics.
 
+## Purpose
+
+Demistify PCA to let exploration as simple as possible for c++ devs.
+
 ## Lexical
 
 Pre-processing
@@ -79,7 +83,7 @@ Sources
 
 * [CMake](https://cmake.org/). 
 * C++ compiler, here g++, [howto change it](https://stackoverflow.com/questions/45933732/how-to-specify-a-compiler-in-cmake) in [CMakeLists.txt](CMakeLists.txt). 
-* [Alglib](https://www.alglib.net). 
+* [Alglib](https://www.alglib.net) included in src. 
 * [Boost lib](https://www.boost.org/). 
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 

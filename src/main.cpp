@@ -112,7 +112,7 @@ static bool traindebug(mat_dble inputData, int pDim, std::string outputFile, Dis
 }
 
 template <typename T, ui_t NC, ui_t NR>
-static void pca(fixt_s<T, NC, NR> fix, Display *disp)
+static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
 {
     try
     {
@@ -129,11 +129,10 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
         disp->mat(COV_MAT_TITLE, mcov, c, c);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
         disp->mat(COR_MAT_TITLE, mcorr, c, c);
-        // Pca
+        // Pca, in contrary of python alglib::pcabuildbasis operates reduction from dataset
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
-        // In contrary of python alglib::pcabuildbasis operates reduction from raw datas
         alglib::pcabuildbasis(ptInput, r, c, info, eigValues, eigVectors);
         disp->mat(PCA_EIGEN_VECTORS_TITLE, eigVectors, c, c);
         disp->vec(PCA_EIGEN_VALUES_TITLE, eigValues, c);
@@ -146,6 +145,7 @@ static void pca(fixt_s<T, NC, NR> fix, Display *disp)
             std::cout << TAB TAB << "C" << i << SPACE
                       << (eigValues[i] / eigvaSum)
                       << std::endl;
+        // Calculate projection
         T *projMat = new T[c * r];
         for (i = 0; i < r; i++)
             for (j = 0; j < c; j++)
@@ -185,8 +185,6 @@ static void init_colormap(colormap_t *colormap)
 int main(int argc, char **argv)
 {
 
-    
-
     colormap_t colors;
     init_colormap(&colors);
     Display *disp = new Display(colors);
@@ -209,7 +207,7 @@ int main(int argc, char **argv)
     fixt_s<double, 4, 150> fixcsvspecies4x150;
     fix_csv_species_4x150(FIXT_CSV_FILE_SPECIES, &fixcsvspecies4x150);
     disp->title("Fixture csv species 4x150");
-    pca(fixcsvspecies4x150, disp);
+    pcadetail(fixcsvspecies4x150, disp);
     traindebug(datas, fixcsvspecies4x150.nbrow, "pca.log", disp);
     delete (disp);
     return 0;
