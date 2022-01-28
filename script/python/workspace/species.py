@@ -13,6 +13,11 @@ data, species = datasets.load_iris(return_X_y=True)
 data = pd.DataFrame(data)
 species = pd.DataFrame(species)
 
+data.to_csv('species.csv', index=False)
+
+print("Dataframe summary")
+print(data.iloc[:,:])
+
 # Calcul de la matrice de covariance 
 cov_matrix = data.cov()
 print("Covariance matrix")
@@ -40,8 +45,8 @@ data_t = data.dot(projection_matrix)
 data_t.columns = ["axe1", "axe2"]
 data_t["species"] = species
 
-print("Projection species")
-print(data_t["species"])
+print("Projection")
+print(data_t)
 
 chart = alt.Chart(data_t).mark_point().encode(
     x=alt.X("axe1", title=f"axe 1 {axe1_info}%"), 

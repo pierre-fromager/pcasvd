@@ -43,7 +43,7 @@ void Csv<T>::load(std::string f, unsigned int skip)
                 boost::token_compress_on);
             const size_t sitemsSize = sitems.size();
             
-            if (nbrow > skip)
+            if (nbrow >= skip)
             {
                 m_lines.push_back(line);
                 for (cpt = 0; cpt < sitemsSize; cpt++)

@@ -32,6 +32,10 @@ As you may notice
 * covariance is lossless with a wide dispersion.
 * correlation is lossy with scaled dispersion.
 
+So what should I use cov or cor ?  
+When using dataset with columns values of same units use covariance else use correlation.  
+So method to use will depend on the nature of your dataset.
+
 ## Features
 
 * PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis)
