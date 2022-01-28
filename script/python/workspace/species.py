@@ -32,6 +32,11 @@ print(eigen_vectors)
 print("Eigen values")
 print(eigen_values)
 
+print("Explained variance")
+pca = PCA(n_components=4)
+pca.fit(data)
+print(pca.explained_variance_ratio_)
+
 # Calcul de l'information récupéré en pourcentage sur les 2 premiers axes
 info = (eigen_values / sum(eigen_values) * 100).round(2)
 axe1_info = info[0]
