@@ -44,13 +44,16 @@ axe2_info = info[1]
 
 # Projection des points sur les deux premiers vecteurs 
 projection_matrix = eigen_vectors.T[:][:2].T
+print("Projection matrix 2 first vectors")
+print(projection_matrix)
+
 data_t = data.dot(projection_matrix)
 
 # Affichage des nouvelles données à 2 dimensions
 data_t.columns = ["axe1", "axe2"]
 data_t["species"] = species
 
-print("Projection")
+print("Projection on dataframe")
 print(data_t)
 
 chart = alt.Chart(data_t).mark_point().encode(

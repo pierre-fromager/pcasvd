@@ -18,7 +18,7 @@ scripts can be used to generate graphics.
 
 ## Purpose
 
-Demistify PCA to let exploration as simple as possible for c++ devs.
+Demistify PCA to let exploration as simple as possible for c/c++ devs.
 
 ## Lexical
 
