@@ -62,42 +62,24 @@ static void fix_csv_species_4x150(std::string filename, fixt_s<double, 4, 150> *
 }
 
 static void projection(
-    alglib::real_2d_array a,
-    alglib::real_2d_array b,
-    alglib::real_2d_array result,
-    Display *disp)
+    alglib::real_2d_array &a,
+    alglib::real_2d_array &b,
+    alglib::real_2d_array &result)
 {
-    alglib::ae_int_t m = a.rows();
-    alglib::ae_int_t n = b.cols();
-    alglib::ae_int_t k = a.cols();
-    double alpha = 1.0;
-    alglib::ae_int_t ia = 0;
-    alglib::ae_int_t ja = 0;
-    alglib::ae_int_t optypea = 0;
-    alglib::ae_int_t ib = 0;
-    alglib::ae_int_t jb = 0;
-    alglib::ae_int_t optypeb = 0;
-    double beta = 0.0;
-    alglib::ae_int_t ic = 0;
-    alglib::ae_int_t jc = 0;
-    alglib::rmatrixgemm(
-        m,
-        n,
-        k,
-        alpha,
-        a,
-        ia,
-        ja,
-        optypea,
-        b,
-        ib,
-        jb,
-        optypeb,
-        beta,
-        result,
-        ic,
-        jc);
-    disp->mat("Projected matrix", result, m, n);
+    const alglib::ae_int_t m = a.rows();
+    const alglib::ae_int_t n = b.cols();
+    const alglib::ae_int_t k = a.cols();
+    const double alpha = 1.0;
+    const alglib::ae_int_t ia = 0;
+    const alglib::ae_int_t ja = 0;
+    const alglib::ae_int_t optypea = 0;
+    const alglib::ae_int_t ib = 0;
+    const alglib::ae_int_t jb = 0;
+    const alglib::ae_int_t optypeb = 0;
+    const double beta = 0.0;
+    const alglib::ae_int_t ic = 0;
+    const alglib::ae_int_t jc = 0;
+    alglib::rmatrixgemm(m, n, k, alpha, a, ia, ja, optypea, b, ib, jb, optypeb, beta, result, ic, jc);
 }
 
 template <typename T, ui_t NC, ui_t NR>
@@ -132,15 +114,15 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
             eigvaSum += eigValues[i];
         disp->subtitle(PCA_EXPLAINED_VARIANCE_TITLE);
         for (i = 0; i < c; i++)
-            std::cout << TAB TAB << "C" << i << SPACE
+            std::cout << TAB << "C" << i << SPACE
                       << (eigValues[i] / eigvaSum)
                       << std::endl;
         // Calculate projection
         alglib::real_2d_array resproj;
         T *projMat = new T[c * r];
         resproj.setcontent(r, c, (T *)&projMat);
-        projection(ptInput, eigVectors, resproj, disp);
-        //disp->mat("Projected matrix", resproj, r, c);
+        projection(ptInput, eigVectors, resproj);
+        disp->mat(PCA_PROJECTMAT_TITLE, resproj, r, c, maxrow);
         delete projMat;
         /*
         alglib::real_1d_array w;
@@ -184,19 +166,19 @@ int main(int argc, char **argv)
     fix_2x12(&fix2x12);
     pca(fix2x12, disp);
  
+    disp->title("Fixture csv gsaw 4x12");
     fixt_s<double, 4, 12> fixcsv4x12;
     fix_csv_4x12(FIXT_CSV_FILE_GSAW, &fixcsv4x12);
-    disp->title("Fixture csv gsaw 4x12");
     pca(fixcsv4x12, disp);
 
+    disp->title("Fixture csv bovin 6x23");
     fixt_s<double, 6, 23> fixcsvbovin6x23;
     fix_csv_bovin_6x23(FIXT_CSV_FILE_BOVIN, &fixcsvbovin6x23);
-    disp->title("Fixture csv bovin 6x23");
     pca(fixcsvbovin6x23, disp);*/
 
+    disp->title("Fixture csv iris species 4x150");
     fixt_s<double, 4, 150> fixcsvspecies4x150;
     fix_csv_species_4x150(FIXT_CSV_FILE_SPECIES, &fixcsvspecies4x150);
-    disp->title("Fixture csv species 4x150");
     pcadetail(fixcsvspecies4x150, disp);
     delete (disp);
     return 0;
