@@ -133,7 +133,7 @@ user    0m0,008s
 sys    0m0,000s
 ```
 
-Result C++
+* Result C++
 
 ```
 Fixture csv iris species 4x150
@@ -185,7 +185,6 @@ Fixture csv iris species 4x150
 	2.757022	-5.008654	0.600293	-0.108928
 	2.773649	-5.653707	0.541773	-0.094610
 	         ...
-
 ```
 ## Testing
 
