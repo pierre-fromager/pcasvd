@@ -61,66 +61,15 @@ static void fix_csv_species_4x150(std::string filename, fixt_s<double, 4, 150> *
     delete (csv);
 }
 
-static bool traindebug(mat_dble inputData, int pDim, std::string outputFile, Display *disp)
+static void projection(
+    alglib::real_2d_array a,
+    alglib::real_2d_array b,
+    alglib::real_2d_array result,
+    Display *disp)
 {
-    if (inputData.size() < 1 || inputData[0].size() < 1)
-        return false;
-    int numSamples = (int)inputData.size();
-    int oDim = (int)inputData[0].size();
-    double *dataMat = new double[numSamples * oDim];
-    int i, j;
-    for (i = 0; i < numSamples; i++)
-        for (j = 0; j < oDim; j++)
-            dataMat[i * oDim + j] = inputData[i][j];
-    std::cout << std::endl;
-    alglib::real_2d_array ptInput;
-    ptInput.setcontent(numSamples, oDim, dataMat);
-    alglib::ae_int_t info;
-    alglib::real_1d_array eigValues;
-    alglib::real_2d_array eigVectors;
-    pcabuildbasis(ptInput, numSamples, oDim, info, eigValues, eigVectors);
-    disp->mat("Debug eig Vectors", eigVectors, 4, 4);
-    disp->vec("Debug eig Values", eigValues, 4);
-    delete[] dataMat;
-    alglib::ae_int_t cols = (int)eigVectors.cols();
-    if (cols < pDim)
-        pDim = cols;
-    double *projMat = new double[pDim * oDim];
-    double *eigVec = new double[pDim];
-    for (i = 0; i < pDim; i++)
-    {
-        eigVec[i] = 1 / sqrt(eigValues[i]);
-        for (j = 0; j < oDim; j++)
-            projMat[i * oDim + j] = eigVectors[j][i];
-    }
-    // save to file
-    ofstream fout;
-    fout.open(outputFile.c_str());
-    if (!fout.is_open())
-    {
-        cout << "Cannot save projection matrix to " << outputFile << endl;
-        return false;
-    }
-    fout << oDim << " " << pDim << std::endl;
-    fout << projMat[0];
-    for (i = 1; i < oDim * pDim; i++)
-        fout << " " << projMat[i];
-    fout << endl;
-    fout.close();
-
-    return true;
-}
-
-static void testprojection(Display *disp)
-{
-    alglib::real_2d_array a = "[[1,2,3],[4,5,6]]";
-    alglib::real_2d_array b = "[[7,8,9,10],[11,12,13,14],[15,16,17,18]]";
-    alglib::real_2d_array result = "[[0,0,0,0],[0,0,0,0]]";
-    // result => {{74, 80, 86, 92}, {173, 188, 203, 218}}
     alglib::ae_int_t m = a.rows();
     alglib::ae_int_t n = b.cols();
     alglib::ae_int_t k = a.cols();
-    // std::cout << "n: " << n << "| k: " << k << "| m: " << m << std::endl;
     double alpha = 1.0;
     alglib::ae_int_t ia = 0;
     alglib::ae_int_t ja = 0;
@@ -148,7 +97,7 @@ static void testprojection(Display *disp)
         result,
         ic,
         jc);
-    disp->mat("Test projection matrix",result, m, n);
+    disp->mat("Projected matrix", result, m, n);
 }
 
 template <typename T, ui_t NC, ui_t NR>
@@ -187,44 +136,12 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
                       << (eigValues[i] / eigvaSum)
                       << std::endl;
         // Calculate projection
-        testprojection(disp);
-        /*
+        alglib::real_2d_array resproj;
         T *projMat = new T[c * r];
-        mproj.setcontent(r, c, (T *)&projMat);
-        alglib::ae_int_t m = r * c;
-        alglib::ae_int_t n = c;
-        alglib::ae_int_t k = c;
-        double alpha = 1.0;
-        alglib::ae_int_t ia = 0;
-        alglib::ae_int_t ja = 0;
-        alglib::ae_int_t optypea = 0;
-        alglib::ae_int_t ib = 0;
-        alglib::ae_int_t jb = 0;
-        alglib::ae_int_t optypeb = 0;
-        double beta = 0.0;
-        alglib::ae_int_t ic = 0;
-        alglib::ae_int_t jc = 0;
-        rmatrixgemm(
-            m,
-            n,
-            k,
-            alpha,
-            eigVectors,
-            ia,
-            ja,
-            optypea,
-            ptInput,
-            ib,
-            jb,
-            optypeb,
-            beta,
-            mproj,
-            ic,
-            jc);
-
-        disp->mat("Projected matrix", mproj, r, c, 10);
-        delete projMat;*/
-
+        resproj.setcontent(r, c, (T *)&projMat);
+        projection(ptInput, eigVectors, resproj, disp);
+        //disp->mat("Projected matrix", resproj, r, c);
+        delete projMat;
         /*
         alglib::real_1d_array w;
         alglib::fisherlda(ptInput, r, c, c, info, w);
@@ -281,7 +198,6 @@ int main(int argc, char **argv)
     fix_csv_species_4x150(FIXT_CSV_FILE_SPECIES, &fixcsvspecies4x150);
     disp->title("Fixture csv species 4x150");
     pcadetail(fixcsvspecies4x150, disp);
-    traindebug(datas, fixcsvspecies4x150.nbrow, "pca.log", disp);
     delete (disp);
     return 0;
 }
