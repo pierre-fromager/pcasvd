@@ -111,6 +111,46 @@ static bool traindebug(mat_dble inputData, int pDim, std::string outputFile, Dis
     return true;
 }
 
+static void testprojection(Display *disp)
+{
+    alglib::real_2d_array a = "[[1,2,3],[4,5,6]]";
+    alglib::real_2d_array b = "[[7,8,9,10],[11,12,13,14],[15,16,17,18]]";
+    alglib::real_2d_array result = "[[0,0,0,0],[0,0,0,0]]";
+    // result => {{74, 80, 86, 92}, {173, 188, 203, 218}}
+    alglib::ae_int_t m = a.rows();
+    alglib::ae_int_t n = b.cols();
+    alglib::ae_int_t k = a.cols();
+    // std::cout << "n: " << n << "| k: " << k << "| m: " << m << std::endl;
+    double alpha = 1.0;
+    alglib::ae_int_t ia = 0;
+    alglib::ae_int_t ja = 0;
+    alglib::ae_int_t optypea = 0;
+    alglib::ae_int_t ib = 0;
+    alglib::ae_int_t jb = 0;
+    alglib::ae_int_t optypeb = 0;
+    double beta = 0.0;
+    alglib::ae_int_t ic = 0;
+    alglib::ae_int_t jc = 0;
+    alglib::rmatrixgemm(
+        m,
+        n,
+        k,
+        alpha,
+        a,
+        ia,
+        ja,
+        optypea,
+        b,
+        ib,
+        jb,
+        optypeb,
+        beta,
+        result,
+        ic,
+        jc);
+    disp->mat("Test projection matrix",result, m, n);
+}
+
 template <typename T, ui_t NC, ui_t NR>
 static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
 {
@@ -129,7 +169,8 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
         disp->mat(COV_MAT_TITLE, mcov, c, c);
         alglib::pearsoncorrm(ptInput, r, c, mcorr);
         disp->mat(COR_MAT_TITLE, mcorr, c, c);
-        // Pca, in contrary of python alglib::pcabuildbasis operates reduction from dataset
+        // Pca => alglib::pcabuildbasis operates its own reduction from dataset
+        // nor cov neither cor required
         alglib::ae_int_t info;
         alglib::real_1d_array eigValues;
         alglib::real_2d_array eigVectors;
@@ -146,17 +187,49 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp)
                       << (eigValues[i] / eigvaSum)
                       << std::endl;
         // Calculate projection
+        testprojection(disp);
+        /*
         T *projMat = new T[c * r];
-        for (i = 0; i < r; i++)
-            for (j = 0; j < c; j++)
-                projMat[i * c + j] = eigVectors[j][i];
-        mproj.setcontent(r, c, projMat);
-        disp->mat("Projection matrix", mproj, r, c);
-        delete projMat;
+        mproj.setcontent(r, c, (T *)&projMat);
+        alglib::ae_int_t m = r * c;
+        alglib::ae_int_t n = c;
+        alglib::ae_int_t k = c;
+        double alpha = 1.0;
+        alglib::ae_int_t ia = 0;
+        alglib::ae_int_t ja = 0;
+        alglib::ae_int_t optypea = 0;
+        alglib::ae_int_t ib = 0;
+        alglib::ae_int_t jb = 0;
+        alglib::ae_int_t optypeb = 0;
+        double beta = 0.0;
+        alglib::ae_int_t ic = 0;
+        alglib::ae_int_t jc = 0;
+        rmatrixgemm(
+            m,
+            n,
+            k,
+            alpha,
+            eigVectors,
+            ia,
+            ja,
+            optypea,
+            ptInput,
+            ib,
+            jb,
+            optypeb,
+            beta,
+            mproj,
+            ic,
+            jc);
+
+        disp->mat("Projected matrix", mproj, r, c, 10);
+        delete projMat;*/
+
         /*
         alglib::real_1d_array w;
         alglib::fisherlda(ptInput, r, c, c, info, w);
-        disp->vec("Lda", w, 2);*/
+        disp->vec("Lda", w, 2);
+        */
     }
     catch (alglib::ap_error e)
     {
