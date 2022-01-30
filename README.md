@@ -73,11 +73,13 @@ Hereby
 * [2x12 inline](src/main.cpp)
 * [4x12 pop(gender/salary/age/weight) csv](script/matlab/gsaw.csv)
 * [6x23 bovins(vif/carcasse/quality/total/gras/os) csv](script/matlab/bovin.csv)
+* [4x150 iris species(sepallength/sepalwidth/petallength/petalwidth) csv](script/python/workspace/species.csv)
 
 Sources  
 * [Numerical Example](https://www.itl.nist.gov/div898/handbook/pmc/section5/pmc552.htm)
 * [2x12 (age/weight)](https://datatab.net/statistics-calculator/factor-analysis)
 * [bovins (@see above)](https://cermics.enpc.fr/scilab_new/site/Tp/Statistique/acp/acp.html)
+* [iris species](https://datahub.io/machine-learning/iris/r/1.html)
 
 ## Requirements
 
@@ -100,43 +102,90 @@ Sources
 ```
 
 ## Sample output
+
+Comparing perf between Python and C++ (iso features).
+
+Related to
+* [iris species dataset](https://datahub.io/machine-learning/iris/r/1.html) input source.
+* Python script [species.py](./script/python/workspace/species.py)
+
+Processing time
+* Test platform
 ```
-Fixture 2x12
+Quad Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+```
+
+* Python
+```
+real    0m5.492s
+user    0m4.160s
+sys    0m0.752s
+```
+* C++
+```
+real    0m0,007s
+user    0m0,008s
+sys    0m0,000s
+```
+Result C++
+```
+Fixture csv iris species 4x150
 	Fixture datas (matrix)
-	          33	          80
-	          33	          82.5
-	          34	          100.8
-	          42	          90
-	          29	          67
-	          19	          60
-	          50	          77
-	          55	          77
-	          31	          87
-	          46	          70
-	          36	          57
-	          48	          64
+
+	5.100000	3.500000	1.400000	0.200000
+	4.900000	3.000000	1.400000	0.200000
+	4.700000	3.200000	1.300000	0.200000
+	4.600000	3.100000	1.500000	0.200000
+	5.000000	3.600000	1.400000	0.200000
+	         ...
 	Covariance (matrix)
-	          106.727	          10.1182
-	          10.1182	          170.026
+
+	0.685694	-0.042434	1.274315	0.516271
+	-0.042434	0.189979	-0.329656	-0.121639
+	1.274315	-0.329656	3.116278	1.295609
+	0.516271	-0.121639	1.295609	0.581006
+
 	Correlation (matrix)
-	          1	          0.0751117
-	          0.0751117	          1
+
+	1.000000	-0.117570	0.871754	0.817941
+	-0.117570	1.000000	-0.428440	-0.366126
+	0.871754	-0.428440	1.000000	0.962865
+	0.817941	-0.366126	0.962865	1.000000
+
 	Eigen vectors (matrix)
-	          -0.154098	          -0.988056
-	          -0.988056	          0.154098
+
+	0.361387	-0.656589	0.582030	0.315487
+	-0.084523	-0.730161	-0.597911	-0.319723
+	0.856671	0.173373	-0.076236	-0.479839
+	0.358289	0.075481	-0.545831	0.753657
+
 	Eigen values (vector)
-	          171.604	          105.149
-	Explained variance (%)
-		P0 62.0061
-		P1 37.9939
-	Lda
-	          0.988056	          -0.154098
+
+	4.228242	0.242671	0.078210	0.023835
+	
+	Explained variance
+
+	C0 0.924619
+	C1 0.0530665
+	C2 0.0171026
+	C3 0.00521218
+	
+	Projected matrix
+
+	2.818240	-5.646350	0.659768	-0.031089
+	2.788223	-5.149951	0.842317	0.065675
+	2.613375	-5.182003	0.613952	-0.013383
+	2.757022	-5.008654	0.600293	-0.108928
+	2.773649	-5.653707	0.541773	-0.094610
+	         ...
 
 ```
 ## Testing
 
-@todo Wip
-
 ```
 ./build/pca_test
 ```
+
+## Todo
+* Tests implementation
+* 2D graphics rendering
