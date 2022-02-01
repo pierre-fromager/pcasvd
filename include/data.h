@@ -23,7 +23,8 @@ namespace Data
 namespace File
 {
 
-typedef struct metas_s {
+typedef struct metas_s
+{
     std::string filename;
     std::string sep;
     unsigned int cols;
@@ -34,9 +35,9 @@ template <typename T>
 class Csv
 {
 public:
-    Csv(std::string separator);
+    explicit Csv(std::string separator);
     ~Csv();
-    void load(std::string filename,unsigned int skip = 0);
+    void load(std::string filename, unsigned int skip = 0);
     void save(std::string filename);
     std::vector<T> buffer(void);
     metas_t metas(void);

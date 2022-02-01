@@ -24,7 +24,7 @@ using namespace std;
 class Display
 {
 public:
-    Display(colormap_t colors);
+    explicit Display(colormap_t colors);
     ~Display();
     void mat(string title, alglib::real_2d_array v, ui_t nbrow, ui_t nbcol, ui_t maxrow = 0);
     void vec(string title, alglib::real_1d_array v, ui_t nbcol);

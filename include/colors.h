@@ -35,7 +35,7 @@ private:
     const std::string estop = "m";
 
 public:
-    Define(Id id) : cid(id) {}
+    explicit Define(Id id) : cid(id) {}
     std::string to_str(void)
     {
         return estart + std::to_string(cid) + estop;
