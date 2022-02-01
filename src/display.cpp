@@ -62,7 +62,7 @@ void Display::print(std::string color, string line, bool rset, bool end)
 void Display::printvalue(double v)
 {
     //double fmtv = sprintf("%lf",v);
-    char fmt_value[12];
+    char fmt_value[24];
     sprintf(fmt_value, "%08.6lf", v);
     // cout << std::setw(15) << std::setfill('0') << fmt_value;
     cout << TAB << fmt_value;

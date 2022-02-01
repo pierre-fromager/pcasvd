@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 project (Pca)
 
 add_definitions(
-    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17
+    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 -g
 	-Wno-unused-function -Wno-unused-parameter -Wno-unused-variable 
 	-Wno-format-nonliteral -Wcast-qual -Wno-strict-aliasing 
 	-Wformat=2 -Wformat-security 
