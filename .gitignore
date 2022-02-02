@@ -3,3 +3,6 @@ doc/html
 callgrind.*
 .~lock.*
 build
+iris_proj.csv
+gplot-draw-proj.png
+*.log
