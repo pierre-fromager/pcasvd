@@ -8,24 +8,28 @@ namespace File
 {
 
 template <typename T>
-Csv<T>::Csv(std::string s) : m_separator(s)
+Csv<T>::Csv()
 {
 }
 
 template <typename T>
 Csv<T>::~Csv()
 {
+    init();
+}
+
+template <typename T>
+void Csv<T>::init(void)
+{
     m_lines.clear();
     m_buffer.clear();
 }
 
 template <typename T>
-void Csv<T>::load(std::string f, unsigned int skip)
+void Csv<T>::load(void)
 {
-    m_filename = f;
-    m_metas.filename = f;
-    m_metas.sep = m_separator;
-    std::ifstream is(m_filename);
+    init();
+    std::ifstream is(m_metas.filename);
     std::string line;
     std::vector<std::string> sitems;
     size_t cpt;
@@ -39,11 +43,11 @@ void Csv<T>::load(std::string f, unsigned int skip)
             boost::split(
                 sitems,
                 line,
-                boost::is_any_of(m_separator),
+                boost::is_any_of(m_metas.sep),
                 boost::token_compress_on);
             const size_t sitemsSize = sitems.size();
-            
-            if (nbrow >= skip)
+
+            if (nbrow >= m_metas.skip)
             {
                 m_lines.push_back(line);
                 for (cpt = 0; cpt < sitemsSize; cpt++)
@@ -61,9 +65,46 @@ void Csv<T>::load(std::string f, unsigned int skip)
 }
 
 template <typename T>
-void Csv<T>::save(std::string f)
+void Csv<T>::save(void)
 {
-    m_filename = f;
+    unsigned int i, j;
+    std::ofstream os(m_metas.filename);
+    std::ostringstream strval;
+    m_lines.clear();
+    std::string line;
+    for (j = 0; j < m_metas.rows; j++)
+    {
+        strval.str("");
+        strval.clear();
+        for (i = 0; i < m_metas.cols; i++)
+        {
+            const T v = m_buffer[i + (j * m_metas.cols)];
+            strval << boost::lexical_cast<std::string>(v) << m_metas.sep;
+        }
+        line = strval.str();
+        line.pop_back();
+        m_lines.push_back(line);
+    }
+    if (os.is_open())
+    {
+        if (m_metas.header.length() > 0)
+            os << m_metas.header << std::endl;
+        for (j = 0; j < m_metas.rows; j++)
+            os << m_lines[j] << std::endl;
+        os.close();
+    }
+}
+
+template <typename T>
+void Csv<T>::setBuffer(std::vector<T> buffer)
+{
+    m_buffer = buffer;
+}
+
+template <typename T>
+void Csv<T>::setMetas(metas_t metas)
+{
+    m_metas = metas;
 }
 
 template <typename T>

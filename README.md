@@ -41,9 +41,12 @@ When using dataset with columns values of same units use covariance else use cor
 So method to use will depend on the nature of your dataset.
 
 ## Features
-
-* PCA [fr](https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales) (Principal Component Analysis)
-* [Difference between LDA and PCA (en)](https://sebastianraschka.com/faq/docs/lda-vs-pca.html)
+* Covariance
+* Correlation
+* Pca
+* Explained variance
+* Projection
+* 2D scatter plot png renderer
 
 ## References
 
@@ -87,6 +90,7 @@ Sources
 * C++ compiler, here g++, [howto change it](https://stackoverflow.com/questions/45933732/how-to-specify-a-compiler-in-cmake) in [CMakeLists.txt](CMakeLists.txt). 
 * [Alglib](https://www.alglib.net) included in src. 
 * [Boost lib](https://www.boost.org/). 
+* [Gnuplot-iostream](https://github.com/dstahlke/gnuplot-iostream).
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 
 ## Build
@@ -194,4 +198,4 @@ Fixture csv iris species 4x150
 
 ## Todo
 * Tests implementation
-* 2D graphics rendering
+

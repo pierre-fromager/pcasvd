@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/lexical_cast.hpp>
 
 #define TAB "\t"
 #define COMA ","
@@ -23,22 +24,29 @@ namespace Data
 namespace File
 {
 
+using boost::lexical_cast;
+
 typedef struct metas_s
 {
     std::string filename;
     std::string sep;
+    std::string header;
     unsigned int cols;
     unsigned int rows;
+    unsigned int skip;
 } metas_t;
 
 template <typename T>
 class Csv
 {
 public:
-    explicit Csv(std::string separator);
+    explicit Csv();
     ~Csv();
-    void load(std::string filename, unsigned int skip = 0);
-    void save(std::string filename);
+    void setMetas(metas_t metas);
+    void load(void);
+    void save(void);
+    void init(void);
+    void setBuffer(std::vector<T> buffer);
     std::vector<T> buffer(void);
     metas_t metas(void);
 

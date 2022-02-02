@@ -1,8 +1,13 @@
 cmake_minimum_required (VERSION 2.8)
 project (Pca)
 
+# packages.
+find_package(Boost REQUIRED COMPONENTS
+    iostreams system filesystem
+)
+
 add_definitions(
-    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 -g
+    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 
 	-Wno-unused-function -Wno-unused-parameter -Wno-unused-variable 
 	-Wno-format-nonliteral -Wcast-qual -Wno-strict-aliasing 
 	-Wformat=2 -Wformat-security 
@@ -15,6 +20,7 @@ add_definitions(
 	-Wstack-usage=250000 
 	-D_FORTIFY_SOURCE=2
     )
+
 # -Wconversion -Wstrict-overflow=4 -Wundef -Wnull-dereference 
 
 file (GLOB_RECURSE Pca_SOURCES CONFIGURE_DEPENDS "src/*.cpp")
@@ -27,12 +33,25 @@ foreach (_headerFile ${Pca_HEADERS})
 endforeach()
 list (REMOVE_DUPLICATES Pca_INCLUDE_DIRS)
 
+include_directories (${Boost_INCLUDE_DIRS})
+add_definitions (-DBOOST_TEST_DYN_LINK)
+
 add_executable(pca ${Pca_SOURCES})
 target_include_directories(pca PRIVATE ${Pca_INCLUDE_DIRS})
 
-include_directories(${Pca_INCLUDE_DIRS})
+include_directories(
+	${Pca_INCLUDE_DIRS} 
+	${Boost_INCLUDE_DIRS})
+
+add_definitions (-DBOOST_TEST_DYN_LINK)
+
 add_library (pca_lib ${Pca_SOURCES} ${Pca_INCLUDE_DIRS})
-target_link_libraries(pca pca_lib)
+target_link_libraries(
+	pca 
+	pca_lib 
+	${Boost_FILESYSTEM_LIBRARY}
+	${Boost_SYSTEM_LIBRARY}
+	${Boost_LIBRARIES})
 
 #enable_testing ()
 #add_subdirectory (test)

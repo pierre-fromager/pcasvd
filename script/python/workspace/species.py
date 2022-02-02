@@ -7,6 +7,7 @@ from sklearn import datasets
 from sklearn.decomposition import PCA
 
 # Téléchargement du jeux de données iris 
+# https://gist.github.com/netj/8836201
 
 data, species = datasets.load_iris(return_X_y=True)
 
