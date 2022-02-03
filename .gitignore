@@ -3,6 +3,7 @@ doc/html
 callgrind.*
 .~lock.*
 build
-iris_proj.csv
-gplot-draw-proj.png
+pca_proj.csv
+pca_corcircle.png
+pca_scatter.png
 *.log
