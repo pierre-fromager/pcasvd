@@ -41,12 +41,16 @@ When using dataset with columns values of same units use covariance else use cor
 So method to use will depend on the nature of your dataset.
 
 ## Features
+
+### Calculus
 * Covariance
 * Correlation
 * Pca
 * Explained variance
 * Projection
-* 2D scatter plot png renderer
+### Graphics
+* Scatter
+* Correlation circle
 
 ## References
 
@@ -107,37 +111,11 @@ Sources
 
 ## Sample output
 
-Comparing perf between Python and C++ (iso features).
-
 Related to
 * [iris species dataset](https://datahub.io/machine-learning/iris/r/1.html) input source.
 * Python script [species.py](./script/python/workspace/species.py)
 
-Processing time
-
-* Test platform
-
-```
-Quad Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
-```
-
-* Python
-
-```
-real    0m5.492s
-user    0m4.160s
-sys    0m0.752s
-```
-
-* C++
-
-```
-real    0m0,007s
-user    0m0,008s
-sys    0m0,000s
-```
-
-* Result C++
+### Console
 
 ```
 Fixture csv iris species 4x150
@@ -190,6 +168,16 @@ Fixture csv iris species 4x150
 	2.773649	-5.653707	0.541773	-0.094610
 	         ...
 ```
+### Graphics
+
+#### Scatter
+
+![Scatter](doc/assets/img/scatter.png)
+
+#### Correlation circle
+
+![CorCircle](doc/assets/img/corcircle.png)
+
 ## Testing
 
 ```

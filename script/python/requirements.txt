@@ -5,3 +5,4 @@ altair_saver
 sklearn
 mlxtend
 matplotlib
+seaborn

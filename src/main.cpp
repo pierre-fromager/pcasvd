@@ -88,12 +88,13 @@ static void init_colormap(colormap_t *colormap)
 
 template <typename T>
 static void saveproj(
+    std::string filename,
     Data::File::metas_t &datasetMetas,
     Data::File::Csv<T> *dataset,
     pca_result_s<T> &result)
 {
     datasetMetas = dataset->metas();
-    datasetMetas.filename = "iris_proj.csv";
+    datasetMetas.filename = filename; //"iris_proj.csv";
     datasetMetas.header = "C1;C2;C3;C4";
     datasetMetas.sep = SEMICOLON;
     std::vector<double> v;
@@ -119,12 +120,16 @@ static void getCol(alglib::real_2d_array a, const ui_t &colnum, std::vector<T> &
 }
 
 template <typename T>
-static void plotProjWrapper(std::string filename, pca_result_s<T> &result)
+static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
 {
     struct gplot_params_s<T> gparams;
-    gparams.title = "Iris Species";
-    gparams.legend = "Setosa Versicolor Virginica";
     gparams.filename = filename;
+    gparams.width = 1024;
+    gparams.height = 768;
+    gparams.title = "Scatter : Iris species";
+    gparams.xlabel = "PC1 (Petal width)";
+    gparams.ylabel = "PC2 (Petal length)";
+    gparams.legend = "Setosa Versicolor Virginica";
     std::vector<T> col1, col2;
     getCol<T>(result.proj, 0, col1);
     const T margin = 0.5;
@@ -142,12 +147,39 @@ static void plotProjWrapper(std::string filename, pca_result_s<T> &result)
             category = 1;
         else
             category = 2;
-        gparams.xyc.emplace_back(col1[c], col2[c], category);    
+        gparams.serie_xyc.emplace_back(col1[c], col2[c], category);
     }
     col1.clear();
     col2.clear();
     Gplot<T> *gpl = new Gplot<T>(gparams);
     gpl->drawScatter();
+    delete (gpl);
+}
+
+template <typename T>
+static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
+{
+    struct gplot_params_s<T> gparams;
+    gparams.filename = filename;
+    gparams.width = 900;
+    gparams.height = 800;
+    gparams.title = "Correlation circle : Iris";
+    gparams.xlabel = "Dim1(" + to_string(result.exp_variance[0] * 100) + "%)";
+    gparams.ylabel = "Dim2(" + to_string(result.exp_variance[1] * 100) + "%)";
+    gparams.legend = "SepalL SepalW PetalL PetalW";
+    const T margin = 0.1;
+    std::vector<T> col1, col2;
+    getCol<T>(result.eig_vectors, 0, col1);
+    getCol<T>(result.eig_vectors, 1, col2);
+    gparams.lxrange = gparams.lyrange = -1 - margin;
+    gparams.hxrange = gparams.hyrange = 1 + margin;
+    T category;
+    for (ui_t c = 0; c < col1.size(); c++)
+        gparams.serie_ooxyc.emplace_back(0, 0, col1[c], col2[c], c);
+    col1.clear();
+    col2.clear();
+    Gplot<T> *gpl = new Gplot<T>(gparams);
+    gpl->drawCorCircle();
     delete (gpl);
 }
 
@@ -190,10 +222,9 @@ int main(int argc, char **argv)
     dataset->setMetas(datasetMetas);
     hydrate_fix_csv(dataset, &fixspecies);
     pcadetail(fixspecies, disp, result);
-
-    saveproj<double>(datasetMetas, dataset, result);
-
-    plotProjWrapper<double>("gplot-draw-proj.png", result);
+    saveproj<double>("pca_proj.csv", datasetMetas, dataset, result);
+    plotScatterWrapper<double>("pca_scatter.png", result);
+    plotCorCircleWrapper<double>("pca_corcircle.png", result);
 
     delete (dataset);
     delete (disp);
