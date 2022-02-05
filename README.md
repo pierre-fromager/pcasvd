@@ -109,6 +109,14 @@ Sources
 ./build/pca
 ```
 
+## Debug
+
+### Gnuplot
+
+```
+GNUPLOT_IOSTREAM_CMD=">dbgscript.gp" ./build/pca
+```
+
 ## Sample output
 
 Related to
@@ -119,7 +127,7 @@ Related to
 
 ```
 Fixture csv iris species 4x150
-	Fixture datas (matrix)
+	Fixture Dataset
 
 	5.100000	3.500000	1.400000	0.200000
 	4.900000	3.000000	1.400000	0.200000
@@ -127,37 +135,34 @@ Fixture csv iris species 4x150
 	4.600000	3.100000	1.500000	0.200000
 	5.000000	3.600000	1.400000	0.200000
 	         ...
-	Covariance (matrix)
+	Covariance
 
 	0.685694	-0.042434	1.274315	0.516271
 	-0.042434	0.189979	-0.329656	-0.121639
 	1.274315	-0.329656	3.116278	1.295609
 	0.516271	-0.121639	1.295609	0.581006
 
-	Correlation (matrix)
+	Correlation
 
 	1.000000	-0.117570	0.871754	0.817941
 	-0.117570	1.000000	-0.428440	-0.366126
 	0.871754	-0.428440	1.000000	0.962865
 	0.817941	-0.366126	0.962865	1.000000
 
-	Eigen vectors (matrix)
+	Eigen vectors
 
 	0.361387	-0.656589	0.582030	0.315487
 	-0.084523	-0.730161	-0.597911	-0.319723
 	0.856671	0.173373	-0.076236	-0.479839
 	0.358289	0.075481	-0.545831	0.753657
 
-	Eigen values (vector)
+	Eigen values
 
 	4.228242	0.242671	0.078210	0.023835
 	
 	Explained variance
-
-	C0 0.924619
-	C1 0.0530665
-	C2 0.0171026
-	C3 0.00521218
+	
+	0.924619	0.053066	0.017103	0.005212
 	
 	Projected matrix
 
@@ -177,6 +182,10 @@ Fixture csv iris species 4x150
 #### Correlation circle
 
 ![CorCircle](doc/assets/img/corcircle.png)
+
+#### Heatmap correlation 
+
+![HeatMapCor](doc/assets/img/heatmapcor.png)
 
 ## Testing
 

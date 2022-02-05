@@ -8,18 +8,21 @@
 #include <cmath>
 #include <boost/format.hpp>
 #include <gnuplot-iostream.h>
+#include <alglib/ap.h>
 
 #define SQ "'"
 #define SMC ";"
 #define COMA ","
 #define _PLOT "plot"
 #define _SET "set "
+#define EOD "EOD"
 #define DEFAULT_FONT "Verdana"
-#define SET_TERMINAL_PNG _SET "term pngcairo size %1%,%2% font 'Verdana,8'"
+#define SET_TERMINAL_PNG _SET "term pngcairo transparent enhanced size %1%,%2% font 'Verdana,8'"
 #define SET_OUTPUT_FILENAME_FMT _SET "output '%1%'"
 #define SET_XRANGE_FMT _SET "xrange [%1%:%2%]"
 #define SET_YRANGE_FMT _SET "yrange [%1%:%2%]"
 #define UNSET_COLORBOX "unset colorbox"
+#define SET_COLORBOX "set colorbox"
 #define SET_PALETTE _SET "palette model RGB defined "
 #define PALETTE_DEF "( 1 'black', 2 'blue', 3 'green', 4 'red' )"
 #define SET_XLABEL _SET "xlabel "
@@ -30,6 +33,10 @@
 #define LEGEND1 ",'+' using (kx):(ky + $0*kdy):(word(labels, int($0+1))):0 "
 #define LEGEND2 "with labels left offset 1,-0.1 point pt 7 palette t ''"
 #define SET_LEGEND LEGEND1 LEGEND2
+#define DATAFILE_SEPARATOR "datafile separator"
+
+typedef unsigned int ui_t;
+typedef unsigned short us_t;
 
 /**
  * @brief Gnuplot wrapper params
@@ -40,8 +47,9 @@ template <typename T>
 struct gplot_params_s
 {
     std::string filename, title, legend, xlabel, ylabel;
-    unsigned int width, height;
+    ui_t width, height;
     T lxrange, hxrange, lyrange, hyrange;
+    alglib::real_2d_array mat;
     std::vector<std::tuple<T, T, T>> serie_xyc;
     std::vector<std::tuple<T, T, T, T, T>> serie_ooxyc;
 };
@@ -60,16 +68,25 @@ public:
     ~Gplot();
     void drawScatter(void);
     void drawCorCircle(void);
+    void drawHeatmap(void);
 
 private:
     Gnuplot gp;
     gplot_params_s<T> m_params;
     void initPng(void);
-    void setDefaultFontsSizes(void);
+    void setLegendParams(T kx, T ky, T kdy);
+    void setDefaultFontsSizes(const us_t &title,
+                              const us_t &xlabel,
+                              const us_t &ylabel,
+                              const us_t &tics);
     void setDefaultPalette(void);
     void setAxisLabels(void);
     void setRanges(void);
     void setTitle(void);
+    void splitStr(
+        std::string str,
+        const std::string &delim,
+        std::vector<std::string> &vecstr);
 };
 
 #endif

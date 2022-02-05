@@ -94,7 +94,7 @@ static void saveproj(
     pca_result_s<T> &result)
 {
     datasetMetas = dataset->metas();
-    datasetMetas.filename = filename; //"iris_proj.csv";
+    datasetMetas.filename = filename;
     datasetMetas.header = "C1;C2;C3;C4";
     datasetMetas.sep = SEMICOLON;
     std::vector<double> v;
@@ -127,8 +127,8 @@ static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
     gparams.width = 1024;
     gparams.height = 768;
     gparams.title = "Scatter : Iris species";
-    gparams.xlabel = "PC1 (Petal width)";
-    gparams.ylabel = "PC2 (Petal length)";
+    gparams.xlabel = "PC1 (Petal.W)";
+    gparams.ylabel = "PC2 (Petal.L)";
     gparams.legend = "Setosa Versicolor Virginica";
     std::vector<T> col1, col2;
     getCol<T>(result.proj, 0, col1);
@@ -153,6 +153,7 @@ static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
     col2.clear();
     Gplot<T> *gpl = new Gplot<T>(gparams);
     gpl->drawScatter();
+    gparams.serie_xyc.clear();
     delete (gpl);
 }
 
@@ -161,12 +162,12 @@ static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
-    gparams.width = 900;
-    gparams.height = 800;
-    gparams.title = "Correlation circle : Iris";
-    gparams.xlabel = "Dim1(" + to_string(result.exp_variance[0] * 100) + "%)";
-    gparams.ylabel = "Dim2(" + to_string(result.exp_variance[1] * 100) + "%)";
-    gparams.legend = "SepalL SepalW PetalL PetalW";
+    gparams.height = 1024;
+    gparams.width = gparams.height + 100;
+    gparams.title = "Correlation circle : Iris (4 components)";
+    gparams.xlabel = "PC1(" + to_string(result.exp_variance[0] * 100) + "%)";
+    gparams.ylabel = "PC2(" + to_string(result.exp_variance[1] * 100) + "%)";
+    gparams.legend = "SepLen SepWid PetLen PetWid";
     const T margin = 0.1;
     std::vector<T> col1, col2;
     getCol<T>(result.eig_vectors, 0, col1);
@@ -180,6 +181,24 @@ static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
     col2.clear();
     Gplot<T> *gpl = new Gplot<T>(gparams);
     gpl->drawCorCircle();
+    gparams.serie_ooxyc.clear();
+    delete (gpl);
+}
+
+template <typename T>
+static void plotHeatmapWrapper(std::string filename, pca_result_s<T> &result)
+{
+    struct gplot_params_s<T> gparams;
+    gparams.filename = filename;
+    gparams.height = gparams.width = 800;
+    gparams.title = "Heatmap Correlation : Iris";
+    gparams.lxrange = gparams.lyrange = -1;
+    gparams.hxrange = gparams.hyrange = 1;
+    gparams.xlabel = gparams.ylabel = "Species";
+    gparams.legend = "Sepal.L,Sepal.W,Petal.L,Petal.W";
+    gparams.mat = result.cor;
+    Gplot<T> *gpl = new Gplot<T>(gparams);
+    gpl->drawHeatmap();
     delete (gpl);
 }
 
@@ -225,7 +244,7 @@ int main(int argc, char **argv)
     saveproj<double>("pca_proj.csv", datasetMetas, dataset, result);
     plotScatterWrapper<double>("pca_scatter.png", result);
     plotCorCircleWrapper<double>("pca_corcircle.png", result);
-
+    plotHeatmapWrapper<double>("pca_heatmapcor.png", result);
     delete (dataset);
     delete (disp);
     return 0;
