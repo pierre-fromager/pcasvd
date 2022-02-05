@@ -194,7 +194,7 @@ static void plotHeatmapWrapper(std::string filename, pca_result_s<T> &result)
     gparams.title = "Heatmap Correlation : Iris";
     gparams.lxrange = gparams.lyrange = -1;
     gparams.hxrange = gparams.hyrange = 1;
-    gparams.xlabel = gparams.ylabel = "Species";
+    gparams.xlabel = gparams.ylabel = "Components";
     gparams.legend = "Sepal.L,Sepal.W,Petal.L,Petal.W";
     gparams.mat = result.cor;
     Gplot<T> *gpl = new Gplot<T>(gparams);

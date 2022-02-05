@@ -48,9 +48,11 @@ So method to use will depend on the nature of your dataset.
 * Pca
 * Explained variance
 * Projection
+
 ### Graphics
 * Scatter
 * Correlation circle
+* Heatmap correlation
 
 ## References
 
