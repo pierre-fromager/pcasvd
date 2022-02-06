@@ -179,7 +179,7 @@ Fixture csv iris species 4x150
 
 #### Scatter
 
-![Scatter](doc/assets/img/scatter.png)
+![Scatter](./doc/assets/img/scatter.png)
 
 #### Correlation circle
 

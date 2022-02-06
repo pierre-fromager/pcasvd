@@ -126,9 +126,9 @@ static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
     gparams.filename = filename;
     gparams.width = 1024;
     gparams.height = 768;
-    gparams.title = "Scatter : Iris species";
-    gparams.xlabel = "PC1 (Petal.W)";
-    gparams.ylabel = "PC2 (Petal.L)";
+    gparams.title = "Scatter plot (Individual factor map) : Iris species";
+    gparams.xlabel = "PC1 Petal.W(" + to_string(result.exp_variance[0] * 100) + "%)";
+    gparams.ylabel = "PC2 Petal.L(" + to_string(result.exp_variance[1] * 100) + "%)";
     gparams.legend = "Setosa Versicolor Virginica";
     std::vector<T> col1, col2;
     getCol<T>(result.proj, 0, col1);
@@ -139,7 +139,8 @@ static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
     gparams.lyrange = (*min_element(col2.begin(), col2.end())) - margin;
     gparams.hyrange = (*max_element(col2.begin(), col2.end())) + margin;
     T category;
-    for (ui_t c = 0; c < col1.size(); c++)
+    ui_t coSize = col1.size();
+    for (ui_t c = 0; c < coSize; c++)
     {
         if (c < 52)
             category = 0;
@@ -164,9 +165,9 @@ static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
     gparams.filename = filename;
     gparams.height = 1024;
     gparams.width = gparams.height + 100;
-    gparams.title = "Correlation circle : Iris (4 components)";
-    gparams.xlabel = "PC1(" + to_string(result.exp_variance[0] * 100) + "%)";
-    gparams.ylabel = "PC2(" + to_string(result.exp_variance[1] * 100) + "%)";
+    gparams.title = "Variable factor map : Iris (4 components)";
+    gparams.xlabel = "PC1 Petal.W(" + to_string(result.exp_variance[0] * 100) + "%)";
+    gparams.ylabel = "PC2 Petal.L(" + to_string(result.exp_variance[1] * 100) + "%)";
     gparams.legend = "SepLen SepWid PetLen PetWid";
     const T margin = 0.1;
     std::vector<T> col1, col2;
@@ -175,7 +176,8 @@ static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
     gparams.lxrange = gparams.lyrange = -1 - margin;
     gparams.hxrange = gparams.hyrange = 1 + margin;
     T category;
-    for (ui_t c = 0; c < col1.size(); c++)
+    ui_t coSize = col1.size();
+    for (ui_t c = 0; c < coSize; c++)
         gparams.serie_ooxyc.emplace_back(0, 0, col1[c], col2[c], c);
     col1.clear();
     col2.clear();

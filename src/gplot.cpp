@@ -33,7 +33,10 @@ void Gplot<T>::drawCorCircle(void)
    setLegendParams(m_params.hxrange, m_params.hyrange - 0.5, 0.05);
    setAxisLabels();
    setRanges();
-   gp << SET_CIRCLE << std::endl;
+   gp << SET_CIRCLE_1 << std::endl;
+   gp << SET_CIRCLE_2 << std::endl;
+   gp << _SET << "arrow 1 from -1,0 to 1,0 nohead lt 0" << std::endl;
+   gp << _SET << "arrow 2 from 0,-1 to 0,1 nohead lt 0" << std::endl;
    gp << _PLOT
       << gp.file1d(m_params.serie_ooxyc)
       << USING_CORCIRCLE
@@ -127,7 +130,6 @@ void Gplot<T>::setDefaultFontsSizes(
     const us_t &ylabel,
     const us_t &tics)
 {
-#define _FONT_ " font "
    gp << _SET << "title" << _FONT_ << SQ DEFAULT_FONT COMA
       << title << SQ SMC
       << _SET << "xlabel" << _FONT_ << SQ DEFAULT_FONT COMA
