@@ -53,5 +53,5 @@ target_link_libraries(
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_LIBRARIES})
 
-#enable_testing ()
-#add_subdirectory (test)
+enable_testing ()
+add_subdirectory (test)

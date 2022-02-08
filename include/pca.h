@@ -19,14 +19,15 @@ template <typename T>
 class Pca
 {
 public:
-    explicit Pca(alglib::real_2d_array values, ui_t cols, ui_t rows);
+    explicit Pca(alglib::real_2d_array values);
     ~Pca();
+    ui_t cols(void);
+    ui_t rows(void);
     void process();
     pca_result_s<T> results();
 
 private:
     alglib::real_2d_array m_values;
-    ui_t m_cols, m_rows;
     std::string error_msg;
     pca_result_s<T> m_result;
     ui_t i, j;

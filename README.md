@@ -192,9 +192,5 @@ Fixture csv iris species 4x150
 ## Testing
 
 ```
-./build/pca_test
+./test.sh
 ```
-
-## Todo
-* Tests implementation
-

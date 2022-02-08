@@ -1,29 +1,11 @@
 
 #include <main.h>
-#include <data.h>
+#include <datafile.h>
 #include <colors.h>
 #include <colormap.h>
 #include <display.h>
 #include <pca.h>
 #include <gplot.h>
-
-static void fix_2x12(fixt_s<double, 2, 12> *fix)
-{
-    fix->nbcol = 2;
-    fix->nbrow = 12;
-    fix->values = {33.0, 80.0,
-                   33.0, 82.5,
-                   34.0, 100.8,
-                   42.0, 90.0,
-                   29.0, 67.0,
-                   19.0, 60.0,
-                   50.0, 77.0,
-                   55.0, 77.0,
-                   31.0, 87.0,
-                   46.0, 70.0,
-                   36.0, 57.0,
-                   48.0, 64.0};
-}
 
 template <typename T, ui_t NC, ui_t NR>
 static void hydrate_fix_csv(Data::File::Csv<T> *csv, fixt_s<T, NC, NR> *fix)
@@ -40,10 +22,9 @@ static void hydrate_fix_csv(Data::File::Csv<T> *csv, fixt_s<T, NC, NR> *fix)
 template <typename T, ui_t NC, ui_t NR>
 static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp, pca_result_s<T> &result)
 {
-    const ui_t maxrow = 5;
     alglib::real_2d_array dataFrame;
-    dataFrame.setcontent(NR, NC, (T *)&fix.values);
-    Pca<T> *pca = new Pca<T>(dataFrame, NC, NR);
+    dataFrame.setcontent(NR, NC, fix.values.data());
+    Pca<T> *pca = new Pca<T>(dataFrame);
     bool err = false;
     try
     {
@@ -56,14 +37,17 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp, pca_result_s<T> &res
     }
     if (false == err)
     {
+        const ui_t &maxrow = 5;
+        const ui_t &rows = pca->rows();
+        const ui_t &cols = pca->cols();
         pca_result_s<T> r = result = pca->results();
-        disp->mat(FIXTURE_DATA_TITLE, dataFrame, NR, NC, maxrow);
-        disp->mat(COV_MAT_TITLE, r.cov, NC, NC, 0);
-        disp->mat(COR_MAT_TITLE, r.cor, NC, NC, 0);
-        disp->mat(EIGEN_VECTORS_TITLE, r.eig_vectors, NC, NC);
-        disp->vec(EIGEN_VALUES_TITLE, r.eig_values, NC);
-        disp->vec(EXPLAINED_VARIANCE_TITLE, r.exp_variance, NC);
-        disp->mat(PROJECTMAT_TITLE, r.proj, NR, NC, maxrow);
+        disp->mat(FIXTURE_DATA_TITLE, dataFrame, rows, cols, maxrow);
+        disp->mat(COV_MAT_TITLE, r.cov, cols, cols, 0);
+        disp->mat(COR_MAT_TITLE, r.cor, cols, cols, 0);
+        disp->mat(EIGEN_VECTORS_TITLE, r.eig_vectors, cols, cols);
+        disp->vec(EIGEN_VALUES_TITLE, r.eig_values, cols);
+        disp->vec(EXPLAINED_VARIANCE_TITLE, r.exp_variance, cols);
+        disp->mat(PROJECTMAT_TITLE, r.proj, rows, cols, maxrow);
     }
     delete pca;
 }
@@ -111,8 +95,11 @@ template <typename T>
 static void getCol(alglib::real_2d_array a, const ui_t &colnum, std::vector<T> &col)
 {
     col.clear();
-    for (ui_t j = 0; j < a.rows(); j++)
-        for (ui_t i = 0; i < a.cols(); i++)
+    ui_t i, j;
+    const ui_t cols = a.cols();
+    const ui_t rows = a.rows();
+    for (j = 0; j < rows; j++)
+        for (i = 0; i < cols; i++)
             if (i == colnum)
                 col.push_back(a[j][i]);
             else if (i > colnum)
@@ -206,21 +193,16 @@ static void plotHeatmapWrapper(std::string filename, pca_result_s<T> &result)
 
 int main(int argc, char **argv)
 {
-
     colormap_t colors;
     init_colormap(&colors);
     Display *disp = new Display(colors);
-    /*
-    disp->title("Fixture 2x12");
-    fixt_s<double, 2, 12> fix2x12;
-    fix_2x12(&fix2x12);
-    pcadetail(fix2x12, disp, result);
-    */
+    pca_result_s<double> result;
+
     Data::File::metas_t datasetMetas;
     Data::File::Csv<double> *dataset = new Data::File::Csv<double>();
     datasetMetas.sep = SEMICOLON;
     datasetMetas.skip = 1;
-    pca_result_s<double> result;
+
     /*
     disp->title("Fixture csv gsaw 4x12");
     fixt_s<double, 4, 12> fixgsaw;
@@ -234,8 +216,8 @@ int main(int argc, char **argv)
     datasetMetas.filename = FIXT_CSV_FILE_BOVIN;
     dataset->setMetas(datasetMetas);
     hydrate_fix_csv(dataset, &fixbovin);
-    pcadetail(fixbovin, disp, result);
-    */
+    pcadetail(fixbovin, disp, result);*/
+
     disp->title("Fixture csv iris species 4x150");
     fixt_s<double, 4, 150> fixspecies;
     datasetMetas.sep = COMA;
@@ -243,6 +225,7 @@ int main(int argc, char **argv)
     dataset->setMetas(datasetMetas);
     hydrate_fix_csv(dataset, &fixspecies);
     pcadetail(fixspecies, disp, result);
+
     saveproj<double>("pca_proj.csv", datasetMetas, dataset, result);
     plotScatterWrapper<double>("pca_scatter.png", result);
     plotCorCircleWrapper<double>("pca_corcircle.png", result);

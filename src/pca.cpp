@@ -2,9 +2,7 @@
 #include <pca.h>
 
 template <typename T>
-Pca<T>::Pca(alglib::real_2d_array values, ui_t cols, ui_t rows) : m_values(values),
-                                                                  m_cols(cols),
-                                                                  m_rows(rows)
+Pca<T>::Pca(alglib::real_2d_array values) : m_values(values)
 {
 }
 
@@ -12,11 +10,22 @@ template <typename T>
 Pca<T>::~Pca() {}
 
 template <typename T>
+ui_t Pca<T>::rows()
+{
+    return m_values.rows();
+}
+
+template <typename T>
+ui_t Pca<T>::cols()
+{
+    return m_values.cols();
+}
+
+template <typename T>
 void Pca<T>::process()
 {
-    const ui_t r = m_result.rows = m_rows;
-    const ui_t c = m_result.cols = m_cols;
-    const ui_t maxrow = 5;
+    const ui_t &r = m_result.rows = rows();
+    const ui_t &c = m_result.cols = cols();
     alglib::covm(m_values, r, c, m_result.cov);
     alglib::pearsoncorrm(m_values, r, c, m_result.cor);
     alglib::ae_int_t info;
@@ -41,7 +50,7 @@ void Pca<T>::process()
         alglib::real_1d_array w;
         alglib::fisherlda(ptInput, r, c, c, info, w);
         disp->vec("Lda", w, 2);
-        */
+    */
 }
 
 template <typename T>
