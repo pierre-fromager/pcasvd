@@ -2,24 +2,9 @@
 #ifndef TEST_PCA_FIXTURE_H
 #define TEST_PCA_FIXTURE_H
 
-#include "pca.h"
 #include "f_common.h"
-
-#define DF2X12           \
-    {                    \
-        33.0, 80.0,      \
-            33.0, 82.5,  \
-            34.0, 100.8, \
-            42.0, 90.0,  \
-            29.0, 67.0,  \
-            19.0, 60.0,  \
-            50.0, 77.0,  \
-            55.0, 77.0,  \
-            31.0, 87.0,  \
-            46.0, 70.0,  \
-            36.0, 57.0,  \
-            48.0, 64.0   \
-    }
+#include "f_datasets.h"
+#include "pca.h"
 
 template <typename T, ui_t NC, ui_t NR>
 struct TestPcaFixt : public TestBaseFixt
@@ -56,7 +41,7 @@ struct Pca2x12Fixt : public TestPcaFixt<T, 2, 12>
 {
     const double tol = 0.00001;
     ui_t i, j;
-    Pca2x12Fixt() : TestPcaFixt<T, 2, 12>(DF2X12)
+    Pca2x12Fixt() : TestPcaFixt<T, 2, 12>(DS2X12)
     {
         BOOST_TEST_PASSPOINT();
     }

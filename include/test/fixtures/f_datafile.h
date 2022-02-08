@@ -2,10 +2,13 @@
 #ifndef TEST_DATAFILE_H
 #define TEST_DATAFILE_H
 
-#include "datafile.h"
+#include <boost/filesystem.hpp>
+#include "f_datasets.h"
 #include "f_common.h"
+#include "datafile.h"
 
 #define DATA_FILENAME_LOAD_SPECIES_CSV "./test/datasets/species.csv"
+#define DATA_FILENAME_SAVE_CSV "./build/datafiletest.csv"
 
 typedef unsigned int ui_t;
 
@@ -22,18 +25,14 @@ struct TestDatafileCsvFixt : public TestBaseFixt
         BOOST_TEST_MESSAGE(m_teardown);
         delete (m_dataset);
     }
-
-    std::vector<T> m_buffer;
-    Data::File::metas_t m_metas;
     Data::File::Csv<T> *m_dataset;
 };
 
 template <typename T>
-struct SpeciesCsvFixt : public TestDatafileCsvFixt<T>
+struct CsvFixt : public TestDatafileCsvFixt<T>
 {
-    const double tol = 0.00001;
-    Data::File::metas_t tmpmet;
-    explicit SpeciesCsvFixt() : TestDatafileCsvFixt<T>()
+    Data::File::metas_t m_metas;
+    explicit CsvFixt() : TestDatafileCsvFixt<T>()
     {
         BOOST_TEST_PASSPOINT();
     }

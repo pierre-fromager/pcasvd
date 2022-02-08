@@ -45,7 +45,7 @@ public:
     void setMetas(metas_t metas);
     void load(void);
     void save(void);
-    void init(void);
+    void reset(void);
     void setBuffer(std::vector<T> buffer);
     std::vector<T> buffer(void);
     metas_t metas(void);

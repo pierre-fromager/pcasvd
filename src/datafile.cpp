@@ -17,11 +17,11 @@ Csv<T>::Csv()
 template <typename T>
 Csv<T>::~Csv()
 {
-    init();
+    reset();
 }
 
 template <typename T>
-void Csv<T>::init(void)
+void Csv<T>::reset(void)
 {
     m_lines.clear();
     m_buffer.clear();
@@ -30,7 +30,7 @@ void Csv<T>::init(void)
 template <typename T>
 void Csv<T>::load(void)
 {
-    init();
+    reset();
     std::ifstream is(m_metas.filename);
     std::string line;
     std::vector<std::string> sitems;
