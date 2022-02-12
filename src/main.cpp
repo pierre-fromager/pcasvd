@@ -1,6 +1,7 @@
 
 #include <main.h>
 #include <datafile.h>
+#include <datatree.h>
 #include <colors.h>
 #include <colormap.h>
 #include <display.h>
@@ -71,27 +72,6 @@ static void init_colormap(colormap_t *colormap)
 }
 
 template <typename T>
-static void saveproj(
-    std::string filename,
-    Data::File::metas_t &datasetMetas,
-    Data::File::Csv<T> *dataset,
-    pca_result_s<T> &result)
-{
-    datasetMetas = dataset->metas();
-    datasetMetas.filename = filename;
-    datasetMetas.header = "C1;C2;C3;C4";
-    datasetMetas.sep = SEMICOLON;
-    std::vector<double> v;
-    for (ui_t j = 0; j < result.rows; j++)
-        for (ui_t i = 0; i < result.cols; i++)
-            v.push_back(result.proj[j][i]);
-    dataset->setBuffer(v);
-    v.clear();
-    dataset->setMetas(datasetMetas);
-    dataset->save();
-}
-
-template <typename T>
 static void getCol(alglib::real_2d_array a, const ui_t &colnum, std::vector<T> &col)
 {
     col.clear();
@@ -139,7 +119,8 @@ static void plotScatterWrapper(std::string filename, pca_result_s<T> &result)
     }
     col1.clear();
     col2.clear();
-    Gplot<T> *gpl = new Gplot<T>(gparams);
+    Gplot<T> *gpl = new Gplot<T>();
+    gpl->setParams(gparams);
     gpl->drawScatter();
     gparams.serie_xyc.clear();
     delete (gpl);
@@ -168,7 +149,8 @@ static void plotCorCircleWrapper(std::string filename, pca_result_s<T> &result)
         gparams.serie_ooxyc.emplace_back(0, 0, col1[c], col2[c], c);
     col1.clear();
     col2.clear();
-    Gplot<T> *gpl = new Gplot<T>(gparams);
+    Gplot<T> *gpl = new Gplot<T>();
+    gpl->setParams(gparams);
     gpl->drawCorCircle();
     gparams.serie_ooxyc.clear();
     delete (gpl);
@@ -186,9 +168,31 @@ static void plotHeatmapWrapper(std::string filename, pca_result_s<T> &result)
     gparams.xlabel = gparams.ylabel = "Components";
     gparams.legend = "Sepal.L,Sepal.W,Petal.L,Petal.W";
     gparams.mat = result.cor;
-    Gplot<T> *gpl = new Gplot<T>(gparams);
+    Gplot<T> *gpl = new Gplot<T>();
+    gpl->setParams(gparams);
     gpl->drawHeatmap();
     delete (gpl);
+}
+
+template <typename T>
+static void savePcaResultJson(
+    std::string title,
+    std::string filename,
+    pca_result_s<T> &result)
+{
+    Data::File::Tree<double> *datatree = new Data::File::Tree<double>();
+    datatree->addValue("version", "1.0.0");
+    datatree->addValue("title", title);
+    datatree->addValue("cols", result.cols);
+    datatree->addValue("rows", result.rows);
+    datatree->addVector("eig_values", result.eig_values);
+    datatree->addVector("exp_variance", result.exp_variance);
+    datatree->addMatrix("eig_vectors", result.eig_vectors);
+    datatree->addMatrix("cov", result.cov);
+    datatree->addMatrix("cor", result.cor);
+    datatree->addMatrix("proj", result.proj);
+    datatree->save(filename);
+    delete (datatree);
 }
 
 int main(int argc, char **argv)
@@ -203,22 +207,8 @@ int main(int argc, char **argv)
     datasetMetas.sep = SEMICOLON;
     datasetMetas.skip = 1;
 
-    /*
-    disp->title("Fixture csv gsaw 4x12");
-    fixt_s<double, 4, 12> fixgsaw;
-    datasetMetas.filename = FIXT_CSV_FILE_GSAW;
-    dataset->setMetas(datasetMetas);
-    hydrate_fix_csv(dataset, &fixgsaw);
-    pcadetail(fixgsaw, disp, result);
-
-    disp->title("Fixture csv bovin 6x23");
-    fixt_s<double, 6, 23> fixbovin;
-    datasetMetas.filename = FIXT_CSV_FILE_BOVIN;
-    dataset->setMetas(datasetMetas);
-    hydrate_fix_csv(dataset, &fixbovin);
-    pcadetail(fixbovin, disp, result);*/
-
-    disp->title("Fixture csv iris species 4x150");
+    const std::string &irisTitle = "Fixture csv iris species 4x150";
+    disp->title(irisTitle);
     fixt_s<double, 4, 150> fixspecies;
     datasetMetas.sep = COMA;
     datasetMetas.filename = FIXT_CSV_FILE_SPECIES;
@@ -226,11 +216,14 @@ int main(int argc, char **argv)
     hydrate_fix_csv(dataset, &fixspecies);
     pcadetail(fixspecies, disp, result);
 
-    saveproj<double>("pca_proj.csv", datasetMetas, dataset, result);
+    savePcaResultJson(irisTitle, "pca_results.json", result);
+
     plotScatterWrapper<double>("pca_scatter.png", result);
     plotCorCircleWrapper<double>("pca_corcircle.png", result);
     plotHeatmapWrapper<double>("pca_heatmapcor.png", result);
+
     delete (dataset);
     delete (disp);
+
     return 0;
 }

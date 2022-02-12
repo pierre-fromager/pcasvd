@@ -2,12 +2,17 @@
 #include <gplot.h>
 
 template <typename T>
-Gplot<T>::Gplot(gplot_params_s<T> params) : m_params(params)
+Gplot<T>::Gplot()
 {
 }
 
 template <typename T>
 Gplot<T>::~Gplot() {}
+
+template <typename T>
+void Gplot<T>::setParams(gplot_params_s<T> params){
+   m_params = params;
+}
 
 template <typename T>
 void Gplot<T>::drawScatter(void)

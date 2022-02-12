@@ -7,4 +7,5 @@ pca_proj.csv
 pca_corcircle.png
 pca_scatter.png
 pca_heatmapcor.png
+pca_results.json
 *.log

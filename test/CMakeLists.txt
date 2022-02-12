@@ -9,6 +9,8 @@ add_executable (
     main.cpp 
     suites/pca.cpp
     suites/datafile.cpp
+    suites/datatree.cpp
+    #suites/gplot.cpp
     )
 
 target_link_libraries (

@@ -67,8 +67,9 @@ template <typename T>
 class Gplot
 {
 public:
-    explicit Gplot(gplot_params_s<T> params);
+    explicit Gplot();
     ~Gplot();
+    void setParams(gplot_params_s<T> params);
     void drawScatter(void);
     void drawCorCircle(void);
     void drawHeatmap(void);
