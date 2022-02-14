@@ -16,6 +16,18 @@ Python part [Docker image](./script/python/README.md) can be used to plot and or
 [Matlab/Octave](./script/matlab/README.md) part is available to crosscheck, some 
 scripts can be used to generate graphics.
 
+## Toc
+* :file_folder: [Purpose](#purpose)
+* :file_folder: [Lexical](#lexical)
+* :file_folder: [Features](#features)
+* :file_folder: [Pca explained](#pca-explained)
+* :file_folder: [Build](#build)
+* :file_folder: [Run](#run)
+* :file_folder: [Debug](#debug)
+* :file_folder: [Sample output](#sample-output)
+* :file_folder: [Testing](#testing)
+* :file_folder: [Doc](#doc)
+
 ## Purpose
 
 Demistify PCA to let exploration as simple as possible for c/c++ devs.
@@ -40,43 +52,41 @@ So what should I use cov or cor ?
 When using dataset with columns values of same units use covariance else use correlation.  
 So method to use will depend on the nature of your dataset.
 
+[:arrow_backward:](#toc)
+
 ## Features
 
 ### Calculus
-* Covariance
-* Correlation
-* Pca
-* Explained variance
-* Projection
+* :triangular_ruler: Covariance
+* :triangular_ruler: Correlation
+* :triangular_ruler: Pca
+* :triangular_ruler: Explained variance
+* :triangular_ruler: Projection
 
 ### Graphics
-* Scatter
-* Correlation circle
-* Heatmap correlation
-* Dataset boxes and wiskers ( [What does a box plot tell you?](https://www.simplypsychology.org/boxplots.html) )
+* :chart: [Scatter](#scatter)
+* :chart: [Correlation circle](#correlation-circle)
+* :chart: [Heatmap correlation](#heatmap-correlation)
+* :chart: [Dataset boxes and wiskers](#dataset-box-and-wiskers)
 
-## References
+## Pca explained
 
-### PCA
+* [Introduction](https://www.youtube.com/watch?v=uV5hmpzmWsU)
+* [Math explained PCA](https://www.youtube.com/watch?v=FgakZw6K1QQ)
 
-#### Presentation
- * [Jérome Pages - AgroCampus (fr)](https://www.youtube.com/watch?v=uV5hmpzmWsU)
+Interpretation
+* [Interprétation d'une ACP sur les variables (fr)](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
+* [L'analyse en composante principale (fr)](https://dridk.me/analyse-en-composante-principale.html)
 
-#### Tools
+Questions
+ * [Best way to let pca be normalized (en)](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
+
+Tools
 
 * [Online Statistics Calculator (en)](https://datatab.net/statistics-calculator/factor-analysis)
 * [Principal Component Analysis and Linear Discriminant Analysis with GNU Octave (en)](https://www.bytefish.de/blog/pca_lda_with_gnu_octave.html)
 
-### Pca explaination
-
-* [Math explained PCA](https://www.youtube.com/watch?v=FgakZw6K1QQ)
-
-#### Interpretation
-* [Interprétation d'une ACP sur les variables (fr)](http://www.jybaudot.fr/Analdonnees/acpvarres.html)
-* [L'analyse en composante principale (fr)](https://dridk.me/analyse-en-composante-principale.html)
-
-#### Questions
- * [Best way to let pca be normalized (en)](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance)
+[:arrow_backward:](#toc)
 
 ## Fixtures (datasets)
 Hereby
@@ -101,17 +111,21 @@ Sources
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 * [Doxygen](https://www.doxygen.nl) for doc generation.
 
+[:arrow_backward:](#toc)
+
 ## Build
 
 ```
 ./build.sh
 ```
+[:arrow_backward:](#toc)
 
 ## Run
 
 ```
 ./build/pca
 ```
+[:arrow_backward:](#toc)
 
 ## Debug
 
@@ -120,6 +134,7 @@ Sources
 ```
 GNUPLOT_IOSTREAM_CMD=">dbgscript.gp" ./build/pca
 ```
+[:arrow_backward:](#toc)
 
 ## Sample output
 
@@ -177,29 +192,44 @@ Fixture csv iris species 4x150
 	2.773649	-5.653707	0.541773	-0.094610
 	         ...
 ```
+[:arrow_backward:](#toc)
+
 ### Graphics
 
 #### Scatter
 
+[How can I interpret individual factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
+
 ![Scatter](./doc/assets/img/scatter.png)
+[:arrow_backward:](#toc)
 
 #### Correlation circle
 
+[How can I interpret variable factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
+
 ![CorCircle](doc/assets/img/corcircle.png)
+[:arrow_backward:](#toc)
 
 #### Heatmap correlation 
 
+[How can I interpret heatmap ?](https://www.simplypsychology.org/boxplots.html)
+
 ![HeatMapCor](doc/assets/img/heatmapcor.png)
+[:arrow_backward:](#toc)
 
 #### Dataset box and wiskers
 
+[What does a box plot tell you?](https://www.simplypsychology.org/boxplots.html)
+
 ![BoxAndWiskers](doc/assets/img/boxwiskers.png)
+[:arrow_backward:](#toc)
 
 ## Testing
 
 ```
 ./test.sh
 ```
+[:arrow_backward:](#toc)
 
 ## Doc
 
@@ -210,3 +240,5 @@ doxygen doc/pcasvd.doxygen
 ```
 
 Doc will be genrated in doc/html folder.
+
+[:arrow_backward:](#toc)

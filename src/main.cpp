@@ -113,7 +113,6 @@ int main(int argc, char **argv)
     delete (dataset);
     pcadetail(fixspecies, disp, result);
     delete (disp);
-    savePcaResultJson(irisTitle, "pca_results.json", result);
     GplotWrapper<double> *gpw = new GplotWrapper<double>(result);
     gpw->scatter("pca_scatter.png");
     gpw->corcricle("pca_corcircle.png");
