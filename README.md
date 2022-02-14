@@ -218,7 +218,7 @@ Fixture csv iris species 4x150
 
 #### Heatmap correlation 
 
-:question: [How can I interpret heatmap](https://www.simplypsychology.org/boxplots.html)
+:question: [How can I interpret correlation heatmap](https://www.statology.org/how-to-read-a-correlation-matrix/)
 
 ![HeatMapCor](doc/assets/img/heatmapcor.png)
 [:arrow_backward:](#toc)
@@ -245,6 +245,6 @@ From root project.
 doxygen doc/pcasvd.doxygen
 ```
 
-Doc will be genrated in doc/html folder.
+Doc will be generated in doc/html folder.
 
 [:arrow_backward:](#toc)
