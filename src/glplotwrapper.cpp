@@ -59,11 +59,9 @@ void GplotWrapper<T>::scatter(const std::string &filename)
     }
     col1.clear();
     col2.clear();
-    Gplot<T> *gpl = new Gplot<T>();
-    gpl->setParams(gparams);
-    gpl->drawScatter();
+    this->setParams(gparams);
+    this->drawScatter();
     gparams.serie_xyc.clear();
-    delete (gpl);
 }
 
 template <typename T>
@@ -89,11 +87,9 @@ void GplotWrapper<T>::corcricle(const std::string &filename)
         gparams.serie_ooxyc.emplace_back(0, 0, col1[c], col2[c], c);
     col1.clear();
     col2.clear();
-    Gplot<T> *gpl = new Gplot<T>();
-    gpl->setParams(gparams);
-    gpl->drawCorCircle();
+    this->setParams(gparams);
+    this->drawCorCircle();
     gparams.serie_ooxyc.clear();
-    delete (gpl);
 }
 
 template <typename T>
@@ -108,10 +104,26 @@ void GplotWrapper<T>::heatmap(const std::string &filename)
     gparams.xlabel = gparams.ylabel = "Components";
     gparams.legend = "Sepal.L,Sepal.W,Petal.L,Petal.W";
     gparams.mat = m_result.cor;
-    Gplot<T> *gpl = new Gplot<T>();
-    gpl->setParams(gparams);
-    gpl->drawHeatmap();
-    delete (gpl);
+    this->setParams(gparams);
+    this->drawHeatmap();
+}
+
+template <typename T>
+void GplotWrapper<T>::boxwiskers(
+    const std::string &filename,
+    const std::string &infilename,
+    const std::string &delimiter
+    )
+{
+    struct gplot_params_s<T> gparams;
+    gparams.filename = filename;
+    gparams.infilename = infilename;
+    gparams.delimiter = delimiter;
+    gparams.height = gparams.width = 1024;
+    gparams.title = "Box and wiskers Iris";
+    gparams.legend = "SepalL SepalW PetalL PetalW";
+    this->setParams(gparams);
+    this->drawBoxAndWiskers();
 }
 
 template class GplotWrapper<double>;

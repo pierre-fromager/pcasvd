@@ -10,13 +10,15 @@ template <typename T>
 Gplot<T>::~Gplot() {}
 
 template <typename T>
-void Gplot<T>::setParams(gplot_params_s<T> params){
+void Gplot<T>::setParams(gplot_params_s<T> params)
+{
    m_params = params;
 }
 
 template <typename T>
 void Gplot<T>::drawScatter(void)
 {
+   resetSession();
    initPng();
    setTitle();
    setLegendParams(m_params.hxrange - 1, m_params.hyrange - 0.5, 0.05);
@@ -32,6 +34,7 @@ void Gplot<T>::drawScatter(void)
 template <typename T>
 void Gplot<T>::drawCorCircle(void)
 {
+   resetSession();
    initPng();
    setTitle();
    gp << _SET << "size square" << std::endl;
@@ -52,7 +55,7 @@ void Gplot<T>::drawCorCircle(void)
 template <typename T>
 void Gplot<T>::drawHeatmap(void)
 {
-
+   resetSession();
    initPng();
    setTitle();
    gp << SET_COLORBOX << std::endl;
@@ -87,6 +90,26 @@ void Gplot<T>::drawHeatmap(void)
       gp << _SET << DATAFILE_SEPARATOR << std::endl;
    }
    strows.clear();
+}
+
+template <typename T>
+void Gplot<T>::drawBoxAndWiskers(void)
+{
+   resetSession();
+   initPng();
+   setTitle();
+   gp << "file = '" << m_params.infilename << "'" << std::endl;
+   gp << "set datafile separator '" << m_params.delimiter << "'" << std::endl;
+   gp << "set key autotitle columnhead" << std::endl;
+   gp << "header = '" << m_params.legend << "' " << std::endl;
+   gp << "N = words(header)" << std::endl;
+   gp << "set xtics ('' 1)" << std::endl;
+   gp << "set for [i=1:N] xtics add (word(header, i) i)" << std::endl;
+   gp << "set style data boxplot" << std::endl;
+   gp << "unset key" << std::endl;
+   gp << _PLOT
+      << "for [i=1:N] file using (i):i"
+      << std::endl;
 }
 
 template <typename T>
@@ -126,6 +149,12 @@ void Gplot<T>::initPng(void)
    setDefaultFontsSizes(12, 9, 9, 7);
    setDefaultPalette();
    gp << "NO_ANIMATION = 1" << std::endl;
+}
+
+template <typename T>
+void Gplot<T>::resetSession()
+{
+   gp << "reset session" << std::endl;
 }
 
 template <typename T>

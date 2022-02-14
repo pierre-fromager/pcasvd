@@ -78,7 +78,7 @@ static void savePcaResultJson(
     const std::string &filename,
     pca_result_s<T> &result)
 {
-    Data::File::Tree<double> *datatree = new Data::File::Tree<double>();
+    Data::File::Tree<T> *datatree = new Data::File::Tree<T>();
     datatree->addValue("version", "1.0.0");
     datatree->addValue("title", title);
     datatree->addValue("cols", result.cols);
@@ -118,6 +118,7 @@ int main(int argc, char **argv)
     gpw->scatter("pca_scatter.png");
     gpw->corcricle("pca_corcircle.png");
     gpw->heatmap("pca_heatmapcor.png");
+    gpw->boxwiskers("pca_boxwiskers.png", FIXT_CSV_FILE_SPECIES, COMA);
     delete (gpw);
     return 0;
 }

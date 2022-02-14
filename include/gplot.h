@@ -49,7 +49,7 @@ typedef unsigned short us_t;
 template <typename T>
 struct gplot_params_s
 {
-    std::string filename, title, legend, xlabel, ylabel;
+    std::string infilename, delimiter, filename, title, legend, xlabel, ylabel;
     ui_t width, height;
     T lxrange, hxrange, lyrange, hyrange;
     alglib::real_2d_array mat;
@@ -73,9 +73,13 @@ public:
     void drawScatter(void);
     void drawCorCircle(void);
     void drawHeatmap(void);
+    void drawBoxAndWiskers(void);
+
+protected:
+    Gnuplot gp;
+    void resetSession();
 
 private:
-    Gnuplot gp;
     gplot_params_s<T> m_params;
     void initPng(void);
     void setLegendParams(T kx, T ky, T kdy);

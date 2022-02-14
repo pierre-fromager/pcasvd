@@ -98,6 +98,7 @@ Sources
 * [Boost lib](https://www.boost.org/). 
 * [Gnuplot-iostream](https://github.com/dstahlke/gnuplot-iostream).
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
+* [Doxygen](https://www.doxygen.nl) for doc generation.
 
 ## Build
 
@@ -189,8 +190,22 @@ Fixture csv iris species 4x150
 
 ![HeatMapCor](doc/assets/img/heatmapcor.png)
 
+#### Dataset box and wiskers
+
+![BoxAndWiskers](doc/assets/img/boxwiskers.png)
+
 ## Testing
 
 ```
 ./test.sh
 ```
+
+## Doc
+
+From root project.
+
+```
+doxygen doc/pcasvd.doxygen
+```
+
+Doc will be genrated in doc/html folder.
