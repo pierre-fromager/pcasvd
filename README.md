@@ -38,7 +38,7 @@ Pre-processing
 * Covariance matrix is the dispersion matrix of a dataset.  
 * Correlation matrix is a covariance scaled matrix (identified by diagonal set to 1).  
 
-Svd (Single values decomposition) is the Eigen process applied to a matrix, it returns values and vectors.
+Svd (Single values decomposition) is the Eigen process.
 
 Consider 2 forms of Pca
 * covariance based  (Svd on unscaled matrix).
@@ -48,7 +48,7 @@ As you may notice
 * covariance is lossless with a wide dispersion.
 * correlation is lossy with scaled dispersion.
 
-So what should I use cov or cor ?  
+:question: So what should I use cov or cor  
 When using dataset with columns values of same units use covariance else use correlation.  
 So method to use will depend on the nature of your dataset.
 
@@ -57,17 +57,23 @@ So method to use will depend on the nature of your dataset.
 ## Features
 
 ### Calculus
-* :triangular_ruler: Covariance
-* :triangular_ruler: Correlation
-* :triangular_ruler: Pca
-* :triangular_ruler: Explained variance
-* :triangular_ruler: Projection
+* :triangular_ruler: [Covariance](src/pca.cpp)
+* :triangular_ruler: [Correlation](src/pca.cpp)
+* :triangular_ruler: [Pca basis](src/pca.cpp)
+* :triangular_ruler: [Eigen values](src/pca.cpp)
+* :triangular_ruler: [Eigen vectors](src/pca.cpp)
+* :triangular_ruler: [Explained variance](src/pca.cpp)
+* :triangular_ruler: [Projection](src/pca.cpp)
 
 ### Graphics
 * :chart: [Scatter](#scatter)
 * :chart: [Correlation circle](#correlation-circle)
 * :chart: [Heatmap correlation](#heatmap-correlation)
 * :chart: [Dataset boxes and wiskers](#dataset-box-and-wiskers)
+
+### Exports
+* :clipboard: Csv
+* :clipboard: Json
 
 ## Pca explained
 
@@ -198,28 +204,28 @@ Fixture csv iris species 4x150
 
 #### Scatter
 
-[How can I interpret individual factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
+:question: [How can I interpret individual factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
 
 ![Scatter](./doc/assets/img/scatter.png)
 [:arrow_backward:](#toc)
 
 #### Correlation circle
 
-[How can I interpret variable factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
+:question: [How can I interpret variable factor map](http://factominer.free.fr/reporting/Investigate_PCA.html)
 
 ![CorCircle](doc/assets/img/corcircle.png)
 [:arrow_backward:](#toc)
 
 #### Heatmap correlation 
 
-[How can I interpret heatmap ?](https://www.simplypsychology.org/boxplots.html)
+:question: [How can I interpret heatmap](https://www.simplypsychology.org/boxplots.html)
 
 ![HeatMapCor](doc/assets/img/heatmapcor.png)
 [:arrow_backward:](#toc)
 
 #### Dataset box and wiskers
 
-[What does a box plot tell you?](https://www.simplypsychology.org/boxplots.html)
+:question: [What does a box plot tell you](https://www.simplypsychology.org/boxplots.html)
 
 ![BoxAndWiskers](doc/assets/img/boxwiskers.png)
 [:arrow_backward:](#toc)
