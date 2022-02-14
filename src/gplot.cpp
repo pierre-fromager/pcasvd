@@ -98,15 +98,18 @@ void Gplot<T>::drawBoxAndWiskers(void)
    resetSession();
    initPng();
    setTitle();
-   gp << "file = '" << m_params.infilename << "'" << std::endl;
-   gp << "set datafile separator '" << m_params.delimiter << "'" << std::endl;
-   gp << "set key autotitle columnhead" << std::endl;
-   gp << "header = '" << m_params.legend << "' " << std::endl;
+   setAxisLabels();
+   gp << "file=" << SQ << m_params.infilename << SQ << std::endl;
+   gp << _SET << "datafile separator " << SQ << m_params.delimiter << SQ << std::endl;
+   gp << _SET << "key autotitle columnhead" << std::endl;
+   gp << "header=" << SQ << m_params.legend << SQ << std::endl;
    gp << "N = words(header)" << std::endl;
-   gp << "set xtics ('' 1)" << std::endl;
-   gp << "set for [i=1:N] xtics add (word(header, i) i)" << std::endl;
-   gp << "set style data boxplot" << std::endl;
-   gp << "unset key" << std::endl;
+   gp << _SET << "xtics ('' 1)" << std::endl;
+   gp << _SET << "for [i=1:N] xtics add (word(header, i) i)" << std::endl;
+   gp << _SET << "style fill solid 0.25 border -1" << std::endl;
+   gp << _SET << "style boxplot outliers pointtype 7" << std::endl;
+   gp << _SET << "style data boxplot" << std::endl;
+   gp << _UNSET << "key" << std::endl;
    gp << _PLOT
       << "for [i=1:N] file using (i):i"
       << std::endl;
@@ -144,7 +147,7 @@ void Gplot<T>::initPng(void)
 {
    gp << boost::format(SET_TERMINAL_PNG) % m_params.width % m_params.height << std::endl;
    gp << boost::format(SET_OUTPUT_FILENAME_FMT) % m_params.filename << std::endl;
-   gp << "unset key" << std::endl;
+   gp << _UNSET << "key" << std::endl;
    gp << UNSET_COLORBOX << std::endl;
    setDefaultFontsSizes(12, 9, 9, 7);
    setDefaultPalette();

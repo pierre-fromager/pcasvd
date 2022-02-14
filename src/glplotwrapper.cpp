@@ -112,8 +112,7 @@ template <typename T>
 void GplotWrapper<T>::boxwiskers(
     const std::string &filename,
     const std::string &infilename,
-    const std::string &delimiter
-    )
+    const std::string &delimiter)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
@@ -121,7 +120,9 @@ void GplotWrapper<T>::boxwiskers(
     gparams.delimiter = delimiter;
     gparams.height = gparams.width = 1024;
     gparams.title = "Box and wiskers Iris";
-    gparams.legend = "SepalL SepalW PetalL PetalW";
+    gparams.xlabel = "Components";
+    gparams.ylabel = "Size";
+    gparams.legend = "Sepal.Length Sepal.Width Petal.Length Petal.Width";
     this->setParams(gparams);
     this->drawBoxAndWiskers();
 }

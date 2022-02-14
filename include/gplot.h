@@ -10,14 +10,16 @@
 #include <gnuplot-iostream.h>
 #include <alglib/ap.h>
 
+#define SP " "
 #define SQ "'"
 #define SMC ";"
 #define COMA ","
-#define _PLOT "plot "
-#define _SET "set "
+#define _PLOT "plot" SP
+#define _SET "set" SP
+#define _UNSET "unset" SP
 #define EOD "EOD"
 #define DEFAULT_FONT "Verdana"
-#define _FONT_ " font "
+#define _FONT_ SP "font" SP
 // transparent
 #define SET_TERMINAL_PNG _SET "term pngcairo enhanced size %1%,%2% font 'Verdana,8'"
 #define SET_OUTPUT_FILENAME_FMT _SET "output '%1%'"

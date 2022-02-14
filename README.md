@@ -53,6 +53,7 @@ So method to use will depend on the nature of your dataset.
 * Scatter
 * Correlation circle
 * Heatmap correlation
+* Dataset boxes and wiskers ( [What does a box plot tell you?](https://www.simplypsychology.org/boxplots.html) )
 
 ## References
 
