@@ -62,4 +62,4 @@ chart = alt.Chart(data_t).mark_point().encode(
     y=alt.Y("axe2", title=f"axe 2 {axe2_info}%"), 
     color="species:N")
 
-chart.save('./species.png')    
+chart.save('./scatter.png')    
