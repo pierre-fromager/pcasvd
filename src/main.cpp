@@ -4,8 +4,8 @@
 
 int main(int argc, char **argv)
 {
-    auto *demo = new SpeciesDemo<double, 4, 150>();
-    demo->run();
-    delete (demo);
+    auto *irisDemo = new SpeciesDemo<double, 4, 150>();
+    irisDemo->run();
+    delete (irisDemo);
     return 0;
 }

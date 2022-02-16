@@ -14,6 +14,22 @@
 #define FIXT_CSV_FILE_SPECIES "./script/python/workspace/species.csv"
 #define DISP_MAXROW 5
 #define FIXT_IRIS_TITLE "Fixture csv iris species 4x150"
+#define JSON_PCA_RESULT_FILENAME "pca_results.json"
+#define PNG_SCATTER_FILENAME "pca_scatter.png"
+#define PNG_CORCIRCLE_FILENAME "pca_corcircle.png"
+#define PNG_HEATMAP_FILENAME "pca_heatmapcor.png"
+#define PNG_BOXWISK_FILENAME "pca_boxwiskers.png"
+#define _DTREE_VERSION_ "version"
+#define DTREE_VERSION "1.0.0"
+#define _DTREE_TITLE_ "title"
+#define _DTREE_COLS_ "cols"
+#define _DTREE_ROWS_ "rows"
+#define _DTREE_EIG_VALUES_ "eig_values"
+#define _DTREE_EXP_VARIANCE_ "exp_variance"
+#define _DTREE_EIG_VECTS_ "eig_vectors"
+#define _DTREE_COV_ "cov"
+#define _DTREE_COR_ "cor"
+#define _DTREE_PROJ_ "proj"
 
 #include <boost/asio/thread_pool.hpp>
 #include <boost/asio/post.hpp>
@@ -46,14 +62,17 @@ public:
 
 private:
     ui_t m_maxrow;
+    colormap_t m_colors;
+    Data::File::metas_t m_dataset_metas;
+    fixt_s<T, NC, NR> m_fix_species;
+    Display *m_disp;
+    Data::File::Csv<T> *m_dataset;
     Data::File::Tree<T> *m_datatree;
+    pca_result_s<T> m_result;
     void hydrate_fix_csv(Data::File::Csv<T> *csv, fixt_s<T, NC, NR> *fix);
-    void pcadetail(fixt_s<T, NC, NR> fix, Display *disp, pca_result_s<T> &result);
+    void pcadetail(fixt_s<T, NC, NR> fix, pca_result_s<T> &result);
     void init_colormap(colormap_t *colormap);
-    void savePcaResult(
-        const std::string &title,
-        const std::string &filename,
-        pca_result_s<T> &result);
+    void savePcaResult(const std::string &title, const std::string &filename);
 };
 
 #endif
