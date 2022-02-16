@@ -1,4 +1,6 @@
 
+#include <boost/asio/thread_pool.hpp>
+#include <boost/asio/post.hpp>
 #include <main.h>
 #include <datafile.h>
 #include <datatree.h>
@@ -44,12 +46,6 @@ static void pcadetail(fixt_s<T, NC, NR> fix, Display *disp, pca_result_s<T> &res
         const ui_t &cols = pca->cols();
         pca_result_s<T> r = result = pca->results();
         disp->mat(FIXTURE_DATA_TITLE, dataFrame, rows, cols, maxrow);
-        disp->mat(COV_MAT_TITLE, r.cov, cols, cols, 0);
-        disp->mat(COR_MAT_TITLE, r.cor, cols, cols, 0);
-        disp->mat(EIGEN_VECTORS_TITLE, r.eig_vectors, cols, cols);
-        disp->vec(EIGEN_VALUES_TITLE, r.eig_values, cols);
-        disp->vec(EXPLAINED_VARIANCE_TITLE, r.exp_variance, cols);
-        disp->mat(PROJECTMAT_TITLE, r.proj, rows, cols, maxrow);
     }
     delete pca;
 }
@@ -73,7 +69,7 @@ static void init_colormap(colormap_t *colormap)
 }
 
 template <typename T>
-static void savePcaResultJson(
+static void savePcaResult(
     const std::string &title,
     const std::string &filename,
     pca_result_s<T> &result)
@@ -112,12 +108,30 @@ int main(int argc, char **argv)
     hydrate_fix_csv(dataset, &fixspecies);
     delete (dataset);
     pcadetail(fixspecies, disp, result);
+    boost::asio::thread_pool pool(3);
+    boost::asio::post(pool, [&result, &disp] {
+        disp->mat(COV_MAT_TITLE, result.cov, result.cols, result.cols, 0);
+        disp->mat(COR_MAT_TITLE, result.cor, result.cols, result.cols, 0);
+        disp->mat(EIGEN_VECTORS_TITLE, result.eig_vectors, result.cols, result.cols);
+        disp->vec(EIGEN_VALUES_TITLE, result.eig_values, result.cols);
+        disp->vec(EXPLAINED_VARIANCE_TITLE, result.exp_variance, result.cols);
+        disp->mat(PROJECTMAT_TITLE, result.proj, result.rows, result.cols, 5);
+        return static_cast<ui_t>(0);
+    });
+    boost::asio::post(pool, [&result, irisTitle] {
+        savePcaResult(irisTitle, "pca_results.json", result);
+        return static_cast<ui_t>(0);
+    });
+    boost::asio::post(pool, [&result] {
+        GplotWrapper<double> *gpw = new GplotWrapper<double>(result);
+        gpw->scatter("pca_scatteresult.png");
+        gpw->corcricle("pca_corcircle.png");
+        gpw->heatmap("pca_heatmapcoresult.png");
+        gpw->boxwiskers("pca_boxwiskers.png", FIXT_CSV_FILE_SPECIES, COMA);
+        delete (gpw);
+        return static_cast<ui_t>(0);
+    });
+    pool.join();
     delete (disp);
-    GplotWrapper<double> *gpw = new GplotWrapper<double>(result);
-    gpw->scatter("pca_scatter.png");
-    gpw->corcricle("pca_corcircle.png");
-    gpw->heatmap("pca_heatmapcor.png");
-    gpw->boxwiskers("pca_boxwiskers.png", FIXT_CSV_FILE_SPECIES, COMA);
-    delete (gpw);
     return 0;
 }
