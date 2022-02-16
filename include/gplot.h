@@ -76,7 +76,7 @@ public:
     void drawCorCircle(void);
     void drawHeatmap(void);
     void drawBoxAndWiskers(void);
-    
+
 protected:
     Gnuplot gp;
     void resetSession();
