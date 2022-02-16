@@ -24,33 +24,49 @@ ui_t Pca<T>::cols()
 template <typename T>
 void Pca<T>::process()
 {
-    const ui_t &r = m_result.rows = rows();
-    const ui_t &c = m_result.cols = cols();
-    alglib::covm(m_values, r, c, m_result.cov);
-    alglib::pearsoncorrm(m_values, r, c, m_result.cor);
-    alglib::ae_int_t info;
-    alglib::pcabuildbasis(
-        m_values,
-        r,
-        c,
-        info,
-        m_result.eig_values,
-        m_result.eig_vectors);
-    T eigvaSum = 0;
-    for (i = 0; i < c; i++)
-        eigvaSum += m_result.eig_values[i];
-    m_result.exp_variance = m_result.eig_values;
-    for (i = 0; i < c; i++)
-        m_result.exp_variance[i] = (m_result.eig_values[i] / eigvaSum);
-    T *projMat = new T[c * r];
-    m_result.proj.setcontent(r, c, (T *)&projMat);
-    projection(m_values, m_result.eig_vectors, m_result.proj);
-    delete projMat;
-    /*
-        alglib::real_1d_array w;
-        alglib::fisherlda(ptInput, r, c, c, info, w);
-        disp->vec("Lda", w, 2);
-    */
+    m_result.rows = rows();
+    m_result.cols = cols();
+    struct tasks pool;
+    const ui_t &nbTasks = 3;
+    pool.start(nbTasks);
+    std::future<ui_t> tcov = pool.queue([this](void) mutable {
+        alglib::covm(m_values, m_result.rows, m_result.cols, m_result.cov);
+        return static_cast<ui_t>(0);
+    });
+    std::future<ui_t> tcor = pool.queue([this](void) mutable {
+        alglib::pearsoncorrm(m_values, m_result.rows, m_result.cols, m_result.cor);
+        return static_cast<ui_t>(0);
+    });
+    std::future<ui_t> tpca = pool.queue([this](void) mutable {
+        alglib::ae_int_t info;
+        alglib::pcabuildbasis(
+            m_values,
+            m_result.rows,
+            m_result.cols,
+            info,
+            m_result.eig_values,
+            m_result.eig_vectors);
+        return static_cast<ui_t>(info);
+    });
+    tpca.wait();
+    std::future<ui_t> texvar = pool.queue([this](void) mutable {
+        T eigvaSum = 0;
+        ui_t i;
+        for (i = 0; i < m_result.cols; i++)
+            eigvaSum += m_result.eig_values[i];
+        m_result.exp_variance = m_result.eig_values;
+        for (i = 0; i < m_result.cols; i++)
+            m_result.exp_variance[i] /= eigvaSum;
+        return static_cast<ui_t>(0);
+    });
+    std::future<ui_t> tproj = pool.queue([this](void) mutable {
+        T *projMat = new T[m_result.cols * m_result.rows];
+        m_result.proj.setcontent(m_result.rows, m_result.cols, (T *)&projMat);
+        projection(m_values, m_result.eig_vectors, m_result.proj);
+        delete projMat;
+        return static_cast<ui_t>(0);
+    });
+    pool.finish();
 }
 
 template <typename T>

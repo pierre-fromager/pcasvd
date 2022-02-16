@@ -20,6 +20,7 @@ scripts can be used to generate graphics.
 * :file_folder: [Purpose](#purpose)
 * :file_folder: [Lexical](#lexical)
 * :file_folder: [Features](#features)
+* :file_folder: [Requirements](#requirements)
 * :file_folder: [Pca explained](#pca-explained)
 * :file_folder: [Build](#build)
 * :file_folder: [Run](#run)

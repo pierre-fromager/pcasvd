@@ -49,6 +49,7 @@ add_library (pca_lib ${Pca_SOURCES} ${Pca_INCLUDE_DIRS})
 target_link_libraries(
 	pca 
 	pca_lib 
+	pthread
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_LIBRARIES})
