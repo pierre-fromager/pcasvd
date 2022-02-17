@@ -63,6 +63,9 @@ void Csv<T>::load(void)
         }
         m_metas.rows = m_lines.size();
         is.close();
+    } else {
+        const std::string &errMsg = "cant open file :" + m_metas.filename;
+        throw std::invalid_argument(errMsg); 
     }
 }
 

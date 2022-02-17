@@ -7,13 +7,11 @@
 #define EIGEN_VECTORS_TITLE "Eigen vectors"
 #define EIGEN_VALUES_TITLE "Eigen values\n"
 #define EXPLAINED_VARIANCE_TITLE "\n\tExplained variance\n\t"
-#define PROJECTMAT_TITLE "\n\tProjected matrix"
-#define FIXTURE_TITLE "Fixture"
-#define FIXTURE_DATA_TITLE FIXTURE_TITLE " Dataset"
+#define PROJECTMAT_TITLE "\n\tProjection sample"
+#define FIXTURE_DATA_TITLE "Dataset sample"
 #define ALGLIB_ERR_MSG "Alglib error : "
 #define FIXT_CSV_FILE_SPECIES "./script/python/workspace/species.csv"
 #define DISP_MAXROW 5
-#define FIXT_IRIS_TITLE "Fixture csv iris species 4x150"
 #define JSON_PCA_RESULT_FILENAME "pca_results.json"
 #define PNG_SCATTER_FILENAME "pca_scatter.png"
 #define PNG_CORCIRCLE_FILENAME "pca_corcircle.png"
@@ -52,11 +50,11 @@
  * @tparam NC 
  * @tparam NR 
  */
-template <typename T, ui_t NC, ui_t NR>
+template <typename T>
 class SpeciesDemo
 {
 public:
-    explicit SpeciesDemo();
+    explicit SpeciesDemo(Data::File::metas_t metas);
     ~SpeciesDemo();
     void run(void);
 
@@ -64,13 +62,13 @@ private:
     ui_t m_maxrow;
     colormap_t m_colors;
     Data::File::metas_t m_dataset_metas;
-    fixt_s<T, NC, NR> m_fix_species;
+    fixtv_s<T> m_fix_species;
     Display *m_disp;
     Data::File::Csv<T> *m_dataset;
     Data::File::Tree<T> *m_datatree;
     pca_result_s<T> m_result;
-    void hydrate_fix_csv(Data::File::Csv<T> *csv, fixt_s<T, NC, NR> *fix);
-    void pcadetail(fixt_s<T, NC, NR> fix, pca_result_s<T> &result);
+    void hydrate_fix_csv(Data::File::Csv<T> *csv, fixtv_s<T> *fix);
+    void pcadetail(fixtv_s<T> fix, pca_result_s<T> &result);
     void init_colormap(colormap_t *colormap);
     void savePcaResult(const std::string &title, const std::string &filename);
 };

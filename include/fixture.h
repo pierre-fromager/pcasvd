@@ -2,17 +2,16 @@
 #ifndef FIXTURE_H
 #define FIXTURE_H
 
-#include <array>
 #include <vector>
 
 typedef unsigned int ui_t;
 
-template <typename T, ui_t NC, ui_t NR>
-struct fixt_s
+template <typename T>
+struct fixtv_s
 {
-    ui_t nbcol = NC;
-    ui_t nbrow = NR;
-    std::array<T, NC * NR> values;
+    ui_t nbcol;
+    ui_t nbrow;
+    std::vector<T> values;
 };
 
 #endif

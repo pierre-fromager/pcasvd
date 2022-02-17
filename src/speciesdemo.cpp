@@ -1,30 +1,27 @@
 
 #include <speciesdemo.h>
 
-template <typename T, ui_t NC, ui_t NR>
-SpeciesDemo<T, NC, NR>::SpeciesDemo() : m_maxrow(DISP_MAXROW)
+template <typename T>
+SpeciesDemo<T>::SpeciesDemo(Data::File::metas_t metas) : m_maxrow(DISP_MAXROW), m_dataset_metas(metas)
 {
     init_colormap(&m_colors);
     m_disp = new Display(m_colors);
-    m_dataset_metas.skip = 1;
-    m_dataset_metas.sep = COMA;
-    m_dataset_metas.filename = FIXT_CSV_FILE_SPECIES;
     m_datatree = new Data::File::Tree<T>();
     m_dataset = new Data::File::Csv<T>();
 }
 
-template <typename T, ui_t NC, ui_t NR>
-SpeciesDemo<T, NC, NR>::~SpeciesDemo()
+template <typename T>
+SpeciesDemo<T>::~SpeciesDemo()
 {
     delete (m_disp);
     delete (m_datatree);
     delete (m_dataset);
 }
 
-template <typename T, ui_t NC, ui_t NR>
-void SpeciesDemo<T, NC, NR>::hydrate_fix_csv(
+template <typename T>
+void SpeciesDemo<T>::hydrate_fix_csv(
     Data::File::Csv<T> *csv,
-    fixt_s<T, NC, NR> *fix)
+    fixtv_s<T> *fix)
 {
     Data::File::metas_t metas = csv->metas();
     csv->load();
@@ -32,14 +29,14 @@ void SpeciesDemo<T, NC, NR>::hydrate_fix_csv(
     fix->nbcol = metas.cols;
     fix->nbrow = metas.rows;
     const ui_t nbItems = fix->nbcol * fix->nbrow;
-    std::copy_n(csv->buffer().begin(), nbItems, fix->values.begin());
+    fix->values = csv->buffer();
 }
 
-template <typename T, ui_t NC, ui_t NR>
-void SpeciesDemo<T, NC, NR>::pcadetail(fixt_s<T, NC, NR> fix, pca_result_s<T> &r)
+template <typename T>
+void SpeciesDemo<T>::pcadetail(fixtv_s<T> fix, pca_result_s<T> &r)
 {
     alglib::real_2d_array df;
-    df.setcontent(NR, NC, fix.values.data());
+    df.setcontent(fix.nbrow, fix.nbcol, fix.values.data());
     Pca<T> *pca = new Pca<T>(df);
     bool err = false;
     try
@@ -59,8 +56,8 @@ void SpeciesDemo<T, NC, NR>::pcadetail(fixt_s<T, NC, NR> fix, pca_result_s<T> &r
     delete pca;
 }
 
-template <typename T, ui_t NC, ui_t NR>
-void SpeciesDemo<T, NC, NR>::init_colormap(colormap_t *colormap)
+template <typename T>
+void SpeciesDemo<T>::init_colormap(colormap_t *colormap)
 {
     const Colors::Define c_title(Colors::Id::FG_GREEN);
     const Colors::Define c_sub_title(Colors::Id::FG_CYAN);
@@ -78,8 +75,8 @@ void SpeciesDemo<T, NC, NR>::init_colormap(colormap_t *colormap)
     colormap->reset = creset.to_str();
 }
 
-template <typename T, ui_t NC, ui_t NR>
-void SpeciesDemo<T, NC, NR>::savePcaResult(
+template <typename T>
+void SpeciesDemo<T>::savePcaResult(
     const std::string &title,
     const std::string &fname)
 {
@@ -96,10 +93,11 @@ void SpeciesDemo<T, NC, NR>::savePcaResult(
     m_datatree->save(fname);
 }
 
-template <typename T, ui_t NC, ui_t NR>
-void SpeciesDemo<T, NC, NR>::run(void)
+template <typename T>
+void SpeciesDemo<T>::run(void)
 {
-    m_disp->title(FIXT_IRIS_TITLE);
+    const std::string &title = "Dataset loaded from " + m_dataset_metas.filename;
+    m_disp->title(title);
     m_dataset->setMetas(m_dataset_metas);
     hydrate_fix_csv(m_dataset, &m_fix_species);
     pcadetail(m_fix_species, m_result);
@@ -116,19 +114,22 @@ void SpeciesDemo<T, NC, NR>::run(void)
         return static_cast<ui_t>(0);
     });
     boost::asio::post(pool, [this] {
-        savePcaResult(FIXT_IRIS_TITLE, JSON_PCA_RESULT_FILENAME);
+        savePcaResult(m_dataset_metas.filename, JSON_PCA_RESULT_FILENAME);
         return static_cast<ui_t>(0);
     });
-    boost::asio::post(pool, [this] {
-        auto *gpw = new GplotSpecies<double>(m_result);
-        gpw->scatter(PNG_SCATTER_FILENAME);
-        gpw->corcricle(PNG_CORCIRCLE_FILENAME);
-        gpw->heatmap(PNG_HEATMAP_FILENAME);
-        gpw->boxwiskers(PNG_BOXWISK_FILENAME, FIXT_CSV_FILE_SPECIES, COMA);
-        delete (gpw);
-        return static_cast<ui_t>(0);
-    });
+    if (m_dataset_metas.filename == FIXT_CSV_FILE_SPECIES)
+    {
+        boost::asio::post(pool, [this] {
+            auto *gpw = new GplotSpecies<double>(m_result);
+            gpw->scatter(PNG_SCATTER_FILENAME);
+            gpw->corcricle(PNG_CORCIRCLE_FILENAME);
+            gpw->heatmap(PNG_HEATMAP_FILENAME);
+            gpw->boxwiskers(PNG_BOXWISK_FILENAME, FIXT_CSV_FILE_SPECIES, COMA);
+            delete (gpw);
+            return static_cast<ui_t>(0);
+        });
+    }
     pool.join();
 }
 
-template class SpeciesDemo<double, 4, 150>;
+template class SpeciesDemo<double>;

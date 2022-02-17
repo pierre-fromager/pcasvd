@@ -57,6 +57,12 @@ So method to use will depend on the nature of your dataset.
 
 ## Features
 
+### Demo
+
+SpeciesDemo is semi-generic class starter.  
+You can provide a filename as 1st argument to work on other file than "species.csv".  
+In that case plot features are disabled (for now).
+
 ### Calculus
 * :triangular_ruler: [Covariance](src/pca.cpp)
 * :triangular_ruler: [Correlation](src/pca.cpp)
@@ -249,3 +255,18 @@ doxygen doc/pcasvd.doxygen
 Doc will be generated in doc/html folder.
 
 [:arrow_backward:](#toc)
+
+## Todo
+
+* Include csv delimiter detection in datafile csv class.
+* Improve csv header management (detection to skip or not).
+* Make gplot more generic and thread safe.
+
+## Contribute
+
+* Feel free to clone from master then pull request on your brand new branch.
+* Pls, do not forget to rebase from master before push.
+
+## Licence
+
+* [GPL 3.0](LICENSE)
