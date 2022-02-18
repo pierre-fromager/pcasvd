@@ -26,21 +26,22 @@ void Pca<T>::process()
 {
     m_result.rows = rows();
     m_result.cols = cols();
+    m_result.src = m_values;
     struct tasks pool;
     const ui_t &nbTasks = 3;
     pool.start(nbTasks);
-    std::future<ui_t> tcov = pool.queue([this](void) mutable {
-        alglib::covm(m_values, m_result.rows, m_result.cols, m_result.cov);
+    std::future<ui_t> t_cov = pool.queue([this](void) {
+        alglib::covm(m_result.src, m_result.rows, m_result.cols, m_result.cov);
         return static_cast<ui_t>(0);
     });
-    std::future<ui_t> tcor = pool.queue([this](void) mutable {
-        alglib::pearsoncorrm(m_values, m_result.rows, m_result.cols, m_result.cor);
+    std::future<ui_t> t_cor = pool.queue([this](void) {
+        alglib::pearsoncorrm(m_result.src, m_result.rows, m_result.cols, m_result.cor);
         return static_cast<ui_t>(0);
     });
-    std::future<ui_t> tpca = pool.queue([this](void) {
+    std::future<ui_t> t_pca = pool.queue([this](void) {
         alglib::ae_int_t info;
         alglib::pcabuildbasis(
-            m_values,
+            m_result.src,
             m_result.rows,
             m_result.cols,
             info,
@@ -48,8 +49,8 @@ void Pca<T>::process()
             m_result.eig_vectors);
         return static_cast<ui_t>(info);
     });
-    tpca.wait();
-    std::future<ui_t> texvar = pool.queue([this](void) mutable {
+    t_pca.wait();
+    std::future<ui_t> t_exvar = pool.queue([this](void) {
         T eigvaSum = 0;
         ui_t i;
         for (i = 0; i < m_result.cols; i++)
@@ -60,11 +61,11 @@ void Pca<T>::process()
                 m_result.exp_variance[i] /= eigvaSum;
         return static_cast<ui_t>(0);
     });
-    std::future<ui_t> tproj = pool.queue([this](void) mutable {
+    std::future<ui_t> t_proj = pool.queue([this](void) {
         std::vector<T> projMat(m_result.cols * m_result.rows, 0);
         m_result.proj.setcontent(m_result.rows, m_result.cols, projMat.data());
         projMat.clear();
-        projection(m_values, m_result.eig_vectors, m_result.proj);
+        projection(m_result.src, m_result.eig_vectors, m_result.proj);
         return static_cast<ui_t>(0);
     });
     pool.finish();

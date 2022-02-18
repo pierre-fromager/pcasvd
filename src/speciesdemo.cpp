@@ -2,9 +2,10 @@
 #include <speciesdemo.h>
 
 template <typename T>
-SpeciesDemo<T>::SpeciesDemo(Data::File::metas_t metas) : m_maxrow(DISP_MAXROW), m_dataset_metas(metas)
+SpeciesDemo<T>::SpeciesDemo(Data::File::metas_t metas) : m_maxrow(DISP_MAXROW),
+                                                         m_dataset_metas(metas)
 {
-    init_colormap(&m_colors);
+    initColormap(&m_colors);
     m_disp = new Display(m_colors);
     m_datatree = new Data::File::Tree<T>();
     m_dataset = new Data::File::Csv<T>();
@@ -19,25 +20,23 @@ SpeciesDemo<T>::~SpeciesDemo()
 }
 
 template <typename T>
-void SpeciesDemo<T>::hydrate_fix_csv(
-    Data::File::Csv<T> *csv,
-    fixtv_s<T> *fix)
+void SpeciesDemo<T>::hydrate()
 {
-    Data::File::metas_t metas = csv->metas();
-    csv->load();
-    metas = csv->metas();
-    fix->nbcol = metas.cols;
-    fix->nbrow = metas.rows;
-    const ui_t nbItems = fix->nbcol * fix->nbrow;
-    fix->values = csv->buffer();
+    Data::File::metas_t metas = m_dataset->metas();
+    m_dataset->load();
+    metas = m_dataset->metas();
+    m_fix.nbcol = metas.cols;
+    m_fix.nbrow = metas.rows;
+    const ui_t nbItems = m_fix.nbcol * m_fix.nbrow;
+    m_fix.values = m_dataset->buffer();
 }
 
 template <typename T>
-void SpeciesDemo<T>::pcadetail(fixtv_s<T> fix, pca_result_s<T> &r)
+void SpeciesDemo<T>::pcadetail()
 {
     alglib::real_2d_array df;
-    df.setcontent(fix.nbrow, fix.nbcol, fix.values.data());
-    Pca<T> *pca = new Pca<T>(df);
+    m_result.src.setcontent(m_fix.nbrow, m_fix.nbcol, m_fix.values.data());
+    Pca<T> *pca = new Pca<T>(m_result.src);
     bool err = false;
     try
     {
@@ -50,14 +49,13 @@ void SpeciesDemo<T>::pcadetail(fixtv_s<T> fix, pca_result_s<T> &r)
     }
     if (false == err)
     {
-        r = pca->results();
-        m_disp->mat(FIXTURE_DATA_TITLE, df, pca->rows(), pca->cols(), m_maxrow);
+        m_result = pca->results();
     }
     delete pca;
 }
 
 template <typename T>
-void SpeciesDemo<T>::init_colormap(colormap_t *colormap)
+void SpeciesDemo<T>::initColormap(colormap_t *colormap)
 {
     const Colors::Define c_title(Colors::Id::FG_GREEN);
     const Colors::Define c_sub_title(Colors::Id::FG_CYAN);
@@ -82,8 +80,10 @@ void SpeciesDemo<T>::savePcaResult(
 {
     m_datatree->addValue(_DTREE_VERSION_, DTREE_VERSION);
     m_datatree->addValue(_DTREE_TITLE_, title);
+    m_datatree->addValue("header", title);
     m_datatree->addValue(_DTREE_COLS_, m_result.cols);
     m_datatree->addValue(_DTREE_ROWS_, m_result.rows);
+    m_datatree->addMatrix(_DTREE_SRC_, m_result.src);
     m_datatree->addVector(_DTREE_EIG_VALUES_, m_result.eig_values);
     m_datatree->addVector(_DTREE_EXP_VARIANCE_, m_result.exp_variance);
     m_datatree->addMatrix(_DTREE_EIG_VECTS_, m_result.eig_vectors);
@@ -99,12 +99,14 @@ void SpeciesDemo<T>::run(void)
     const std::string &title = "Dataset loaded from " + m_dataset_metas.filename;
     m_disp->title(title);
     m_dataset->setMetas(m_dataset_metas);
-    hydrate_fix_csv(m_dataset, &m_fix_species);
-    pcadetail(m_fix_species, m_result);
+    hydrate();
+    m_dataset->reset();
+    pcadetail();
     boost::asio::thread_pool pool(3);
     boost::asio::post(pool, [this] {
         const ui_t &c = m_result.cols;
         const ui_t &r = m_result.rows;
+        m_disp->mat(FIXTURE_DATA_TITLE, m_result.src, r, c, m_maxrow);
         m_disp->mat(COV_MAT_TITLE, m_result.cov, c, c, 0);
         m_disp->mat(COR_MAT_TITLE, m_result.cor, c, c, 0);
         m_disp->mat(EIGEN_VECTORS_TITLE, m_result.eig_vectors, c, c);

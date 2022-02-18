@@ -22,6 +22,7 @@ scripts can be used to generate graphics.
 * :file_folder: [Features](#features)
 * :file_folder: [Requirements](#requirements)
 * :file_folder: [Pca explained](#pca-explained)
+* :file_folder: [Check](#check)
 * :file_folder: [Build](#build)
 * :file_folder: [Run](#run)
 * :file_folder: [Debug](#debug)
@@ -131,6 +132,14 @@ Sources
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 * [Doxygen](https://www.doxygen.nl) for doc generation.
 
+[:arrow_backward:](#toc)
+
+
+## Check
+
+```
+./check.sh
+```
 [:arrow_backward:](#toc)
 
 ## Build

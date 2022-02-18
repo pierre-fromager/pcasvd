@@ -1,6 +1,12 @@
 
 #include <datatree.h>
 
+/**
+ * @brief Data::File::Tree
+ * @todo increase precision (default 6) and keep avoiding scientific notation
+ * 
+ * https://thispointer.com/c-convert-double-to-string-and-manage-precision-scientific-notation/
+ */
 namespace Data
 {
 
@@ -242,6 +248,16 @@ ui_t Tree<T>::addVector(const std::string &entry, std::vector<double> vd)
     return 0;
 }
 
+
+/**
+ * @brief add vector from alglib::real_1d_array
+ * @todo replace by std::ostringstream oss & std::setprecision(P) & oss.str()
+ * 
+ * @tparam T 
+ * @param entry 
+ * @param ad 
+ * @return ui_t 
+ */
 template <typename T>
 ui_t Tree<T>::addVector(const std::string &entry, alglib::real_1d_array ad)
 {
@@ -249,18 +265,26 @@ ui_t Tree<T>::addVector(const std::string &entry, alglib::real_1d_array ad)
     ui_t c;
     const ui_t l = ad.length();
     double *adc = ad.getcontent();
-    std::vector<double> vd;
-    vd.clear();
+    std::vector<std::string> vs;
+    vs.clear();
     for (c = 0; c < l; c++)
-        vd.push_back(*(adc + c));
-    addVectorGeneric(vd, entries_node);
-    m_root.add_child(entry, entries_node);
-    vd.clear();
+        vs.push_back(std::to_string(*(adc + c)));
+    addVector(entry, vs);
+    vs.clear();
     return 0;
 }
 
-/** WIP **/
-
+/**
+ * @brief add Matrix from vector of double
+ * @todo replace by std::ostringstream oss & std::setprecision(P) & oss.str()
+ * 
+ * @tparam  
+ * @param entry 
+ * @param cols 
+ * @param rows 
+ * @param vd 
+ * @return ui_t 
+ */
 template <>
 ui_t Tree<double>::addMatrix(
     const std::string &entry, 
@@ -293,6 +317,15 @@ ui_t Tree<double>::addMatrix(
     return 1;
 }
 
+/**
+ * @brief addMatrix from alglib::real_2d_array
+ * @todo replace by std::ostringstream oss & std::setprecision(P) & oss.str()
+ * 
+ * @tparam  
+ * @param entry 
+ * @param m 
+ * @return ui_t 
+ */
 template <>
 ui_t Tree<double>::addMatrix(const std::string &entry, alglib::real_2d_array m)
 {
@@ -304,7 +337,8 @@ ui_t Tree<double>::addMatrix(const std::string &entry, alglib::real_2d_array m)
         for (i = 0; i < m.cols(); i++)
         {
             pt::ptree cell;
-            cell.put_value(m(j, i));
+            std::to_string(m(j, i)); 
+            cell.put_value(std::to_string(m(j, i)));
             row.push_back(std::make_pair("", cell));
         }
         matrix_node.push_back(std::make_pair("", row));
@@ -312,8 +346,6 @@ ui_t Tree<double>::addMatrix(const std::string &entry, alglib::real_2d_array m)
     m_root.add_child(entry, matrix_node);
     return err;
 }
-
-/** ENDWIP **/
 
 static void formatRootJson(pt::ptree m_root, std::string &result)
 {

@@ -9,6 +9,8 @@ struct pca_result_s
 {
     ui_t cols = 0;
     ui_t rows = 0;
+    std::string header;
+    alglib::real_2d_array src;
     alglib::real_1d_array eig_values;
     alglib::real_1d_array exp_variance;
     alglib::real_2d_array cov;

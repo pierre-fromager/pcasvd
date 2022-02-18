@@ -22,6 +22,7 @@
 #define _DTREE_TITLE_ "title"
 #define _DTREE_COLS_ "cols"
 #define _DTREE_ROWS_ "rows"
+#define _DTREE_SRC_ "src"
 #define _DTREE_EIG_VALUES_ "eig_values"
 #define _DTREE_EXP_VARIANCE_ "exp_variance"
 #define _DTREE_EIG_VECTS_ "eig_vectors"
@@ -62,14 +63,14 @@ private:
     ui_t m_maxrow;
     colormap_t m_colors;
     Data::File::metas_t m_dataset_metas;
-    fixtv_s<T> m_fix_species;
+    fixtv_s<T> m_fix;
     Display *m_disp;
     Data::File::Csv<T> *m_dataset;
     Data::File::Tree<T> *m_datatree;
     pca_result_s<T> m_result;
-    void hydrate_fix_csv(Data::File::Csv<T> *csv, fixtv_s<T> *fix);
-    void pcadetail(fixtv_s<T> fix, pca_result_s<T> &result);
-    void init_colormap(colormap_t *colormap);
+    void hydrate();
+    void pcadetail();
+    void initColormap(colormap_t *colormap);
     void savePcaResult(const std::string &title, const std::string &filename);
 };
 

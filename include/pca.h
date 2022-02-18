@@ -23,7 +23,6 @@ private:
     alglib::real_2d_array m_values;
     std::string error_msg;
     pca_result_s<T> m_result;
-    alglib::real_2d_array mcov, mcorr, mproj, resproj;
     void projection(alglib::real_2d_array &a,
                     alglib::real_2d_array &b,
                     alglib::real_2d_array &result);

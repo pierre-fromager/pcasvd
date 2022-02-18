@@ -27,10 +27,39 @@ void Csv<T>::reset(void)
     m_buffer.clear();
 }
 
+static bool findDelimiter(std::string filename, std::string &delimiter)
+{
+    std::ifstream is(filename.c_str());
+    const bool &fileExist = is.is_open();
+    if (fileExist)
+    {
+        std::string l;
+        std::istream &in = std::getline(is, l);
+        if (in)
+        {
+            std::cout << l << std::endl;
+            if (std::find(l.begin(), l.end(), ',') != l.end())
+                delimiter = COMA;
+            else if (std::find(l.begin(), l.end(), ';') != l.end())
+                delimiter = SEMICOLON;
+            else if (std::find(l.begin(), l.end(), ' ') != l.end())
+                delimiter = SPACE;
+        }
+        is.close();
+    }
+    else
+    {
+        const std::string &errMsg = "cant open file :" + filename;
+        throw std::invalid_argument(errMsg);
+    }
+    return fileExist;
+}
+
 template <typename T>
 void Csv<T>::load(void)
 {
     reset();
+    findDelimiter(m_metas.filename, m_metas.sep);
     std::ifstream is(m_metas.filename);
     std::string line;
     std::vector<std::string> sitems;
@@ -59,13 +88,19 @@ void Csv<T>::load(void)
                         m_buffer.push_back(atoi(sitems[cpt].c_str()));
                 m_metas.cols = cpt;
             }
+            else
+            {
+                m_metas.header = line;
+            }
             nbrow++;
         }
         m_metas.rows = m_lines.size();
         is.close();
-    } else {
+    }
+    else
+    {
         const std::string &errMsg = "cant open file :" + m_metas.filename;
-        throw std::invalid_argument(errMsg); 
+        throw std::invalid_argument(errMsg);
     }
 }
 
