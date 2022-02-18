@@ -7,7 +7,7 @@ find_package(Boost REQUIRED COMPONENTS
 )
 
 add_definitions(
-    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 
+    -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 -g 
 	-Wno-unused-function -Wno-unused-parameter -Wno-unused-variable 
 	-Wno-format-nonliteral -Wcast-qual -Wno-strict-aliasing 
 	-Wformat=2 -Wformat-security 
@@ -17,8 +17,9 @@ add_definitions(
 	-Wlogical-op -Wduplicated-cond 
 	-Wformat-signedness -Wshadow 
 	-Wno-undef -Wswitch-enum 
-	-Wstack-usage=250000 
-	-D_FORTIFY_SOURCE=2
+	-Wstack-usage=500000 
+	-D_FORTIFY_SOURCE=2 
+	-fsanitize=leak
     )
 
 # -Wconversion -Wstrict-overflow=4 -Wundef -Wnull-dereference 

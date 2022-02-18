@@ -14,17 +14,11 @@ static bool findDelimiter(std::string filename, std::string &delimiter)
         {
             std::cout << l << std::endl;
             if (std::find(l.begin(), l.end(), ',') != l.end())
-            {
-                delimiter = ",";
-            }
+                delimiter = COMA;
             else if (std::find(l.begin(), l.end(), ';') != l.end())
-            {
-                delimiter = ";";
-            }
+                delimiter = SEMICOLON;
             else if (std::find(l.begin(), l.end(), ' ') != l.end())
-            {
-                delimiter = " ";
-            };
+                delimiter = SP;
         }
         file.close();
     }

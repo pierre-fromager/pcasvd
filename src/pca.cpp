@@ -37,7 +37,7 @@ void Pca<T>::process()
         alglib::pearsoncorrm(m_values, m_result.rows, m_result.cols, m_result.cor);
         return static_cast<ui_t>(0);
     });
-    std::future<ui_t> tpca = pool.queue([this](void) mutable {
+    std::future<ui_t> tpca = pool.queue([this](void) {
         alglib::ae_int_t info;
         alglib::pcabuildbasis(
             m_values,
@@ -55,15 +55,16 @@ void Pca<T>::process()
         for (i = 0; i < m_result.cols; i++)
             eigvaSum += m_result.eig_values[i];
         m_result.exp_variance = m_result.eig_values;
-        for (i = 0; i < m_result.cols; i++)
-            m_result.exp_variance[i] /= eigvaSum;
+        if (eigvaSum != 0)
+            for (i = 0; i < m_result.cols; i++)
+                m_result.exp_variance[i] /= eigvaSum;
         return static_cast<ui_t>(0);
     });
     std::future<ui_t> tproj = pool.queue([this](void) mutable {
-        T *projMat = new T[m_result.cols * m_result.rows];
-        m_result.proj.setcontent(m_result.rows, m_result.cols, (T *)&projMat);
+        std::vector<T> projMat(m_result.cols * m_result.rows, 0);
+        m_result.proj.setcontent(m_result.rows, m_result.cols, projMat.data());
+        projMat.clear();
         projection(m_values, m_result.eig_vectors, m_result.proj);
-        delete projMat;
         return static_cast<ui_t>(0);
     });
     pool.finish();

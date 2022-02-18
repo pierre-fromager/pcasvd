@@ -26,6 +26,7 @@ Compute
 * [sklearn](https://scikit-learn.org/stable/)
 * [mlxtend](https://rasbt.github.io/mlxtend/)
 * [matplotlib](https://matplotlib.org/)
+* [csvkit](https://csvkit.readthedocs.io/en/latest/)
 
 Feel free to add your owns in **requirements.txt**.  
 If changes => build.

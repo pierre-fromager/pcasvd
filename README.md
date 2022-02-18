@@ -101,7 +101,14 @@ Tools
 
 [:arrow_backward:](#toc)
 
-## Fixtures (datasets)
+## Fixtures & datasets
+
+Preparing datasets is essential.  
+Think about using some ETL (Extract Transform Load) before operating pca.  
+I would recommend to read related content to **csvkit** (module included in docker image) :
+* [Clean csv data](https://towardsdatascience.com/how-to-clean-csv-data-at-the-command-line-4862cde6cf0a) to filter relevant datas from a raw source.
+* [10 csvkit commands](https://medium.com/codex/10-csvkit-commands-data-engineers-must-know-a91b34e182e8) you should know as data engineer.
+
 Hereby
 * [2x12 inline](src/main.cpp)
 * [4x12 pop(gender/salary/age/weight) csv](script/matlab/gsaw.csv)
