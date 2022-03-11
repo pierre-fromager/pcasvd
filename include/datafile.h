@@ -29,7 +29,7 @@ using boost::lexical_cast;
 typedef struct metas_s
 {
     std::string filename;
-    std::string sep;
+    std::string delimiter;
     std::string header;
     unsigned int cols;
     unsigned int rows;

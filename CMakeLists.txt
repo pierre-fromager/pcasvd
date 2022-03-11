@@ -1,12 +1,14 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0)
 project (Pca)
 
 # packages.
 find_package(Boost REQUIRED COMPONENTS
-    iostreams system filesystem
+	# NO_DEFAULT_PATH PATHS /usr/local/lib/cmake
+    iostreams system filesystem program_options
 )
 
 add_definitions(
+	# -DAE_CPU=AE_INTEL -DAE_NO_AVX2 -DAE_NO_FMA 
     -O2 -Werror -Wall -Wextra -Wpedantic -std=c++17 -g 
 	-Wno-unused-function -Wno-unused-parameter -Wno-unused-variable 
 	-Wno-format-nonliteral -Wcast-qual -Wno-strict-aliasing 
@@ -22,7 +24,7 @@ add_definitions(
 	-fsanitize=leak
     )
 
-# -Wconversion -Wstrict-overflow=4 -Wundef -Wnull-dereference 
+# -Wconversion -Wstrict-overflow=4 -Wundef -Wnull-dereference
 
 file (GLOB_RECURSE Pca_SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 file (GLOB_RECURSE Pca_HEADERS CONFIGURE_DEPENDS "include/*.h")

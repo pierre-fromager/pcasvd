@@ -20,8 +20,13 @@
 #define _DTREE_VERSION_ "version"
 #define DTREE_VERSION "1.0.0"
 #define _DTREE_TITLE_ "title"
+#define _DTREE_FILENAME_ "metas.filename"
+#define _DTREE_HEADERS_ "metas.header"
+#define _DTREE_DELIMITER_ "metas.delimiter"
 #define _DTREE_COLS_ "cols"
 #define _DTREE_ROWS_ "rows"
+#define _DTREE_OPTS_D1_ "options.d1"
+#define _DTREE_OPTS_D2_ "options.d2"
 #define _DTREE_SRC_ "src"
 #define _DTREE_EIG_VALUES_ "eig_values"
 #define _DTREE_EXP_VARIANCE_ "exp_variance"
@@ -39,23 +44,22 @@
 #include <display.h>
 #include <pca.h>
 #include <gplotspecies.h>
+#include <gplotgeneric.h>
+#include <options.h>
 
 /**
- * @brief SpeciesDemo works on the well known (numpy users) Iris species dataset.
- * @brief Loading dataset from csv file.
- * @brief Processing dataset to provide coverage, correlation,pca,projection as result.
+ * @brief Loading dataset from csv file checking delimiters and setting headers if defined.
+ * @brief Processing dataset to provide coverage,correlation,pca,projection as result.
  * @brief Saving results as json tree.
- * @brief Rendering graphics scatter,corcircle,heatmap,boxwiskers through gnuplot.
- * 
- * @tparam T 
- * @tparam NC 
- * @tparam NR 
+ * @brief Rendering graphics scatter,corcircle,heatmap,boxwiskers.
+ *
+ * @tparam T
  */
 template <typename T>
 class SpeciesDemo
 {
 public:
-    explicit SpeciesDemo(Data::File::metas_t metas);
+    explicit SpeciesDemo(Data::File::metas_t metas,cmd_options_t cmdopts);
     ~SpeciesDemo();
     void run(void);
 
@@ -68,6 +72,7 @@ private:
     Data::File::Csv<T> *m_dataset;
     Data::File::Tree<T> *m_datatree;
     pca_result_s<T> m_result;
+    cmd_options_t m_opts;
     void hydrate();
     void pcadetail();
     void initColormap(colormap_t *colormap);

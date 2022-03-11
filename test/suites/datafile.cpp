@@ -15,7 +15,7 @@ BOOST_FIXTURE_TEST_CASE(DatafileSpeciesLoad, CsvFixt<double>)
         boost::filesystem::exists(DATA_FILENAME_LOAD_SPECIES_CSV),
         true);
     // Check metas from dataset after load
-    m_metas.sep = COMA;
+    m_metas.delimiter = COMA;
     m_metas.skip = 1;
     m_metas.filename = DATA_FILENAME_LOAD_SPECIES_CSV;
     m_dataset->setMetas(m_metas);
@@ -39,7 +39,7 @@ BOOST_FIXTURE_TEST_CASE(DatafileSpeciesLoadSkip, CsvFixt<double>)
         boost::filesystem::exists(DATA_FILENAME_LOAD_SPECIES_CSV),
         true);
     // Check metas from dataset after load
-    m_metas.sep = COMA;
+    m_metas.delimiter = COMA;
     m_metas.skip = 71;
     m_metas.filename = DATA_FILENAME_LOAD_SPECIES_CSV;
     m_dataset->setMetas(m_metas);
@@ -64,7 +64,7 @@ BOOST_FIXTURE_TEST_CASE(DatafileSave, CsvFixt<double>)
     BOOST_CHECK_EQUAL(m_dataset->metas().cols, 0);
     BOOST_CHECK_EQUAL(m_dataset->metas().rows, 0);
     // Set metas to dataset before save
-    m_metas.sep = SEMICOLON;
+    m_metas.delimiter = SEMICOLON;
     m_metas.skip = 0;
     m_metas.header = "C1;C2";
     m_metas.rows = 12;

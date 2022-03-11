@@ -62,7 +62,7 @@ So method to use will depend on the nature of your dataset.
 
 SpeciesDemo is semi-generic class starter.  
 You can provide a filename as 1st argument to work on other file than "species.csv".  
-In that case plot features are disabled (for now).
+In that case you must provide a class label (additional column in csv headers prefixed by #),  see csv samples like [bovinscat](script/matlab/bovinscat.csv),[winecat](script/matlab/winecat.csv).
 
 ### Calculus
 * :triangular_ruler: [Covariance](src/pca.cpp)
@@ -124,10 +124,10 @@ Sources
 
 ## Requirements
 
-* [CMake](https://cmake.org/). 
+* [CMake 3.22.1](https://cmake.org/). 
 * C++ compiler, here g++, [howto change it](https://stackoverflow.com/questions/45933732/how-to-specify-a-compiler-in-cmake) in [CMakeLists.txt](CMakeLists.txt). 
 * [Alglib](https://www.alglib.net) included in src. 
-* [Boost lib](https://www.boost.org/). 
+* [Boost 1.78.0](https://www.boost.org/), check CMakeList.txt to let cmake use the correct PATHS in the find_package. 
 * [Gnuplot-iostream](https://github.com/dstahlke/gnuplot-iostream).
 * [Octave](https://www.gnu.org/software/octave/) or [Matlab](https://mathworks.com/products/matlab.html).
 * [Doxygen](https://www.doxygen.nl) for doc generation.
@@ -151,9 +151,19 @@ Sources
 
 ## Run
 
+Help usage
+```
+./build/pca --help
+```
+Demo species
 ```
 ./build/pca
 ```
+Demo wine options dimension1 column 0, dimension2 column 5
+```
+build/pca script/matlab/winecat.csv --d1 0 --d2 5
+```
+
 [:arrow_backward:](#toc)
 
 ## Debug
@@ -274,9 +284,9 @@ Doc will be generated in doc/html folder.
 
 ## Todo
 
-* Include csv delimiter detection in datafile csv class.
-* Improve csv header management (detection to skip or not).
-* Make gplot more generic and thread safe.
+* Make gplot thread safe. 
+* Improve gplotgeneric heatmap scale. 
+* Remove #cat class from matrices. 
 
 ## Contribute
 

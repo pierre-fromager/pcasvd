@@ -7,7 +7,9 @@ Gplot<T>::Gplot()
 }
 
 template <typename T>
-Gplot<T>::~Gplot() {}
+Gplot<T>::~Gplot()
+{
+}
 
 template <typename T>
 void Gplot<T>::setParams(gplot_params_s<T> params)
@@ -16,12 +18,16 @@ void Gplot<T>::setParams(gplot_params_s<T> params)
 }
 
 template <typename T>
-void Gplot<T>::drawScatter(void)
+void Gplot<T>::drawScatter()
 {
    resetSession();
    initPng();
    setTitle();
-   setLegendParams(m_params.hxrange - 1, m_params.hyrange - 0.5, 0.05);
+   const T ycenter = (m_params.hyrange + m_params.lyrange) / 2;
+   const T kdy = log10(m_params.hyrange - m_params.lyrange);
+   /*std::cout << std::endl
+             << "kdylog:'" << kdylog << "'" << std::endl;*/
+   setLegendParams(m_params.hxrange - 1, ycenter, kdy);
    setAxisLabels();
    setRanges();
    gp << _PLOT
@@ -69,9 +75,9 @@ void Gplot<T>::drawHeatmap(void)
    std::string line;
    if (si == sj)
    {
-      gp << _SET << "palette rgbformulae 33,13,10" << std::endl;
-      gp << "$heatmap <<" << EOD << std::endl;
-      gp << COMA << m_params.legend << std::endl;
+      gp << _SET << "palette rgbformulae 33,13,10" << std::endl
+         << "$heatmap <<" << EOD << std::endl
+         << COMA << m_params.legend << std::endl;
       for (j = 0; j < sj; j++)
       {
          line = strows[sj - 1 - j] + COMA;
@@ -99,17 +105,17 @@ void Gplot<T>::drawBoxAndWiskers(void)
    initPng();
    setTitle();
    setAxisLabels();
-   gp << "file=" << SQ << m_params.infilename << SQ << std::endl;
-   gp << _SET << "datafile separator " << SQ << m_params.delimiter << SQ << std::endl;
-   gp << _SET << "key autotitle columnhead" << std::endl;
-   gp << "header=" << SQ << m_params.legend << SQ << std::endl;
-   gp << "N = words(header)" << std::endl;
-   gp << _SET << "xtics ('' 1)" << std::endl;
-   gp << _SET << "for [i=1:N] xtics add (word(header, i) i)" << std::endl;
-   gp << _SET << "style fill solid 0.25 border -1" << std::endl;
-   gp << _SET << "style boxplot outliers pointtype 7" << std::endl;
-   gp << _SET << "style data boxplot" << std::endl;
-   gp << _UNSET << "key" << std::endl;
+   gp << "file=" << SQ << m_params.infilename << SQ << std::endl
+      << _SET << "datafile separator " << SQ << m_params.delimiter << SQ << std::endl
+      << _SET << "key autotitle columnhead" << std::endl
+      << "header=" << SQ << m_params.legend << SQ << std::endl
+      << "N = words(header)" << std::endl
+      << _SET << "xtics ('' 1)" << std::endl
+      << _SET << "for [i=1:N] xtics add (word(header, i) i)" << std::endl
+      << _SET << "style fill solid 0.25 border -1" << std::endl
+      << _SET << "style boxplot outliers pointtype 7" << std::endl
+      << _SET << "style data boxplot" << std::endl
+      << _UNSET << "key" << std::endl;
    gp << _PLOT
       << "for [i=1:N] file using (i):i"
       << std::endl;
@@ -135,23 +141,23 @@ void Gplot<T>::splitStr(
 template <typename T>
 void Gplot<T>::setLegendParams(T kx, T ky, T kdy)
 {
-   gp << "labels=" << SQ << m_params.legend << SQ << std::endl;
-   gp << _SET << "samples words(labels)" << std::endl;
-   gp << "kx=" << kx << std::endl;
-   gp << "ky=" << ky << std::endl;
-   gp << "kdy=" << kdy << std::endl;
+   gp << "labels=" << SQ << m_params.legend << SQ << std::endl
+      << _SET << "samples words(labels)" << std::endl
+      << "kx=" << kx << std::endl
+      << "ky=" << ky << std::endl
+      << "kdy=" << kdy << std::endl;
 }
 
 template <typename T>
 void Gplot<T>::initPng(void)
 {
-   gp << boost::format(SET_TERMINAL_PNG) % m_params.width % m_params.height << std::endl;
-   gp << boost::format(SET_OUTPUT_FILENAME_FMT) % m_params.filename << std::endl;
-   gp << _UNSET << "key" << std::endl;
-   gp << UNSET_COLORBOX << std::endl;
+   gp << boost::format(SET_TERMINAL_PNG) % m_params.width % m_params.height << std::endl
+      << boost::format(SET_OUTPUT_FILENAME_FMT) % m_params.filename << std::endl
+      << _UNSET << "key" << std::endl
+      << UNSET_COLORBOX << std::endl
+      << "NO_ANIMATION = 1" << std::endl;
    setDefaultFontsSizes(12, 9, 9, 7);
    setDefaultPalette();
-   gp << "NO_ANIMATION = 1" << std::endl;
 }
 
 template <typename T>
@@ -187,16 +193,16 @@ void Gplot<T>::setDefaultPalette(void)
 template <typename T>
 void Gplot<T>::setAxisLabels(void)
 {
-   gp << SET_XLABEL SQ << m_params.xlabel << SQ << std::endl;
-   gp << SET_YLABEL SQ << m_params.ylabel << SQ << std::endl;
+   gp << SET_XLABEL SQ << m_params.xlabel << SQ << std::endl
+      << SET_YLABEL SQ << m_params.ylabel << SQ << std::endl;
 }
 
 template <typename T>
 void Gplot<T>::setRanges(void)
 {
    gp << boost::format(SET_XRANGE_FMT) % m_params.lxrange % m_params.hxrange
-      << std::endl;
-   gp << boost::format(SET_YRANGE_FMT) % m_params.lyrange % m_params.hyrange
+      << std::endl
+      << boost::format(SET_YRANGE_FMT) % m_params.lyrange % m_params.hyrange
       << std::endl;
 }
 

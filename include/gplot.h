@@ -8,7 +8,7 @@
 #include <cmath>
 #include <boost/format.hpp>
 #include <gnuplot-iostream.h>
-#include <alglib/ap.h>
+#include <gplotparams.h>
 
 #define SP " "
 #define SQ "'"
@@ -40,30 +40,34 @@
 #define SET_LEGEND LEGEND1 LEGEND2
 #define DATAFILE_SEPARATOR "datafile separator"
 
+#define ABS(N) ((N<0)?(-N):(N))
+
+/*
 typedef unsigned int ui_t;
-typedef unsigned short us_t;
+typedef unsigned short us_t;*/
 
 /**
  * @brief Gnuplot wrapper params
- * 
- * @tparam T 
+ *
+ * @tparam T
  */
+/*
 template <typename T>
 struct gplot_params_s
 {
-    std::string infilename, delimiter, filename, title, legend, xlabel, ylabel;
+    std::string infilename, delimiter, filename, title, legend, xlabel, ylabel, header;
     ui_t width, height;
     T lxrange, hxrange, lyrange, hyrange;
     alglib::real_2d_array mat;
     std::vector<std::tuple<T, T, T>> serie_xyc;
     std::vector<std::tuple<T, T, T, T, T>> serie_ooxyc;
-};
+};*/
 
 /**
  * @brief Gnuplot wrapper
  * @url https://github.com/dstahlke/gnuplot-iostream/wiki/BasicUsage
- * 
- * @tparam T 
+ *
+ * @tparam T
  */
 template <typename T>
 class Gplot
@@ -72,19 +76,19 @@ public:
     explicit Gplot();
     ~Gplot();
     void setParams(gplot_params_s<T> params);
-    void drawScatter(void);
+    void drawScatter();
     void drawCorCircle(void);
     void drawHeatmap(void);
     void drawBoxAndWiskers(void);
+    void setLegendParams(T kx, T ky, T kdy);
 
 protected:
-    Gnuplot gp;
+    gnuplotio::Gnuplot gp;
     void resetSession();
 
 private:
     gplot_params_s<T> m_params;
     void initPng(void);
-    void setLegendParams(T kx, T ky, T kdy);
     void setDefaultFontsSizes(const us_t &title,
                               const us_t &xlabel,
                               const us_t &ylabel,

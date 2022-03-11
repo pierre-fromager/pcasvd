@@ -31,6 +31,7 @@ void GplotSpecies<T>::scatter(const std::string &filename)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
+    gparams.header = m_result.header;
     gparams.width = 1024;
     gparams.height = 768;
     gparams.title = "Scatter plot (Individual factor map) : Iris species";
@@ -69,6 +70,7 @@ void GplotSpecies<T>::corcricle(const std::string &filename)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
+    gparams.header = m_result.header;
     gparams.height = 1024;
     gparams.width = gparams.height + 100;
     gparams.title = "Variable factor map : Iris (4 components)";
@@ -97,8 +99,9 @@ void GplotSpecies<T>::heatmap(const std::string &filename)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
+    gparams.header = m_result.header;
     gparams.height = gparams.width = 800;
-    gparams.title = "Heatmap Correlation : Iris";
+    gparams.title = "Heatmap Correlation";
     gparams.lxrange = gparams.lyrange = -1;
     gparams.hxrange = gparams.hyrange = 1;
     gparams.xlabel = gparams.ylabel = "Components";
@@ -109,15 +112,13 @@ void GplotSpecies<T>::heatmap(const std::string &filename)
 }
 
 template <typename T>
-void GplotSpecies<T>::boxwiskers(
-    const std::string &filename,
-    const std::string &infilename,
-    const std::string &delimiter)
+void GplotSpecies<T>::boxwiskers(const std::string &filename)
 {
     struct gplot_params_s<T> gparams;
     gparams.filename = filename;
-    gparams.infilename = infilename;
-    gparams.delimiter = delimiter;
+    gparams.header = m_result.header;
+    gparams.infilename = m_result.filename;
+    gparams.delimiter = m_result.delimiter;
     gparams.height = gparams.width = 1024;
     gparams.title = "Box and wiskers Iris";
     gparams.xlabel = "Components";

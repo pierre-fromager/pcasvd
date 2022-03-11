@@ -15,10 +15,7 @@ public:
     void scatter(const std::string &filename);
     void corcricle(const std::string &filename);
     void heatmap(const std::string &filename);
-    void boxwiskers(
-        const std::string &filename,
-        const std::string &infilename,
-        const std::string &delimiter);
+    void boxwiskers(const std::string &filename);
 
 private:
     pca_result_s<T> m_result;

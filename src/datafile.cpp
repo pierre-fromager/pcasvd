@@ -37,7 +37,6 @@ static bool findDelimiter(std::string filename, std::string &delimiter)
         std::istream &in = std::getline(is, l);
         if (in)
         {
-            std::cout << l << std::endl;
             if (std::find(l.begin(), l.end(), ',') != l.end())
                 delimiter = COMA;
             else if (std::find(l.begin(), l.end(), ';') != l.end())
@@ -59,7 +58,7 @@ template <typename T>
 void Csv<T>::load(void)
 {
     reset();
-    findDelimiter(m_metas.filename, m_metas.sep);
+    findDelimiter(m_metas.filename, m_metas.delimiter);
     std::ifstream is(m_metas.filename);
     std::string line;
     std::vector<std::string> sitems;
@@ -74,7 +73,7 @@ void Csv<T>::load(void)
             boost::split(
                 sitems,
                 line,
-                boost::is_any_of(m_metas.sep),
+                boost::is_any_of(m_metas.delimiter),
                 boost::token_compress_on);
             const size_t sitemsSize = sitems.size();
 
@@ -89,9 +88,7 @@ void Csv<T>::load(void)
                 m_metas.cols = cpt;
             }
             else
-            {
                 m_metas.header = line;
-            }
             nbrow++;
         }
         m_metas.rows = m_lines.size();
@@ -119,7 +116,7 @@ void Csv<T>::save(void)
         for (i = 0; i < m_metas.cols; i++)
         {
             const T v = m_buffer[i + (j * m_metas.cols)];
-            strval << boost::lexical_cast<std::string>(v) << m_metas.sep;
+            strval << boost::lexical_cast<std::string>(v) << m_metas.delimiter;
         }
         line = strval.str();
         line.pop_back();

@@ -1,9 +1,6 @@
 find_package (Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
-
 include_directories (${Boost_INCLUDE_DIRS})
-
 add_definitions (-DBOOST_TEST_DYN_LINK -pthread)
-
 add_executable (
     pca_test 
     main.cpp 
@@ -12,7 +9,6 @@ add_executable (
     suites/datatree.cpp
     #suites/gplot.cpp
     )
-
 target_link_libraries (
     pca_test
     pca_lib
